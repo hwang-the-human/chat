@@ -8,8 +8,13 @@ export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
   @Query((returns) => [User])
-  users(): Promise<User[]> {
+  findAllUsers(): Promise<User[]> {
     return this.usersService.findAll();
+  }
+
+  @Query((returns) => User)
+  findUserById(@Args('user_id') user_id: number): Promise<User> {
+    return this.usersService.findUserById(user_id);
   }
 
   @Mutation((returns) => User)

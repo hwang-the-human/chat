@@ -20,8 +20,8 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOneBy({ id });
+  findUserById(user_id: number): Promise<User | null> {
+    return this.usersRepository.findOneBy({ id: user_id });
   }
 
   async remove(id: number): Promise<void> {
