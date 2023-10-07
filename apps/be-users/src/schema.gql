@@ -18,7 +18,8 @@ scalar DateTime
 
 type Query {
   findAllUsers: [User!]!
-  findUserById(user_id: Float!): User!
+  findUserById(user_id: Int!): User!
+  removeUserById(user_id: Float!): User!
 }
 
 type Mutation {
