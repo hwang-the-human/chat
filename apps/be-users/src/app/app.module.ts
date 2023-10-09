@@ -28,6 +28,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
   ],
   controllers: [AppController],

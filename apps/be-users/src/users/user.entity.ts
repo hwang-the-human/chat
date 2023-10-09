@@ -23,6 +23,10 @@ export class User {
 
   @Column()
   @Field()
+  phone_number: string;
+
+  @Column()
+  @Field()
   password: string;
 
   @CreateDateColumn()
