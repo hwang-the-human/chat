@@ -29,7 +29,7 @@ export class UsersService {
 
     const hashed_password = await bcrypt.hash(
       createUserInput.password,
-      +this.configService.get('BCRYPT_SALT')
+      this.configService.get<number>('BCRYPT_SALT')
     );
 
     newUser.password = hashed_password;
