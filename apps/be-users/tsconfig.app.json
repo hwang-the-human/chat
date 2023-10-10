@@ -8,5 +8,9 @@
     "target": "es2021"
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "../be-auth/src/auth/dto/create-user.input.ts",
+    "../../libs/common/users/user.entity.ts"
+  ]
 }
