@@ -15,8 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@app/common": ["libs/common"],
-      "@app/common/*": ["libs/common/*"]
+      "@app/shared": ["libs/shared/src"],
+      "@app/shared/*": ["libs/shared/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

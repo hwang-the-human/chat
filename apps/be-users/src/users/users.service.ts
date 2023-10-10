@@ -1,12 +1,7 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { User } from '@app/common/users/user.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { User } from '@app/shared/entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

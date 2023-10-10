@@ -12,7 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'apps/be-users/src/schema.gql'),
+      autoSchemaFile: join(process.cwd(), 'apps/be-auth/src/schema.gql'),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
