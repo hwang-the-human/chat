@@ -6,6 +6,7 @@ import { join } from 'path';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ChatsModule } from '../chats/chats.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
+
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('DB_HOST'),
@@ -28,6 +30,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
     ConfigModule.forRoot({ isGlobal: true }),
+    ChatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

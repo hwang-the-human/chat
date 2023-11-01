@@ -1,0 +1,28 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Chat {
+  id: Int!
+  sender_id: Int!
+  receiver_id: Int!
+  created_at: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  findUserChats(sender_id: Int!): [Chat!]!
+}
+
+type Mutation {
+  createChat(createChatInput: CreateChatInput!): Chat!
+}
+
+input CreateChatInput {
+  sender_id: Float!
+  receiver_id: Float!
+}

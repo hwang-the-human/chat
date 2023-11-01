@@ -25,7 +25,7 @@ type LoginResponse {
 type Query {
   findAllUsers: [User!]!
   findUserById(user_id: Int!): User!
-  removeUserById(user_id: Float!): User!
+  removeUserById(user_id: Int!): User!
 }
 
 type Mutation {
