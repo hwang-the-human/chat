@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Chat } from './chat.entity';
+import { Chat } from '@app/shared/entities/chat.entity';
 import { CreateChatInput } from './dto/create-chat.input';
 
 @Injectable()

@@ -10,7 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { CreateUserInput } from 'apps/be-users/src/users/dto/register-user.input';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { User } from './user.entity';
+import { User } from '@app/shared/entities/user.entity';
 import { LoginUserInput } from './dto/login-user.input';
 import { LoginResponse } from './dto/login-response';
 

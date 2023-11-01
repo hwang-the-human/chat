@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Chat } from './chat.entity';
+import { Chat } from '@app/shared/entities/chat.entity';
 import { ChatsResolver } from './chats.resolver';
 import { ChatsService } from './chats.service';
 

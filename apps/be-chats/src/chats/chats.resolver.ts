@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ChatsService } from './chats.service';
 import { CreateChatInput } from './dto/create-chat.input';
-import { Chat } from './chat.entity';
+import { Chat } from '@app/shared/entities/chat.entity';
 
 @Resolver(() => Chat)
 export class ChatsResolver {

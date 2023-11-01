@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToOne,
 } from 'typeorm';
+import { User } from '@app/shared/entities/user.entity';
 
 @Entity()
 @ObjectType()

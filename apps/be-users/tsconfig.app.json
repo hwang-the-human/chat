@@ -11,6 +11,6 @@
   "include": [
     "src/**/*.ts",
     "src/users/dto/register-user.input.ts",
-    "src/users/user.entity.ts"
+    "../../libs/shared/src/entities/user.entity.ts"
   ]
 }
