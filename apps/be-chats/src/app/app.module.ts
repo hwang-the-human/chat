@@ -16,7 +16,6 @@ import { ChatsModule } from '../chats/chats.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('DB_HOST'),
