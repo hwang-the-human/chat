@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Chat } from '@app/shared/entities/chat.entity';
-import { User } from '@app/shared/entities/user.entity';
+import { Chat } from '@app/shared/be-chats/entities/chat.entity';
+import { User } from '@app/shared/be-users/entities/user.entity';
 import { ChatsResolver } from './chats.resolver';
 import { ChatsService } from './chats.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';

@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   OneToOne,
 } from 'typeorm';
-import { Chat } from '@app/shared/entities/chat.entity';
+import { Chat } from '@app/shared/be-chats/entities/chat.entity';
 
 @Entity()
 @ObjectType()

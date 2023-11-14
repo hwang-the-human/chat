@@ -7,7 +7,7 @@ import { MessagePattern, EventPattern } from '@nestjs/microservices';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @MessagePattern('get_user')
+  @MessagePattern('get-user')
   async findUserById(userId: number) {
     const user = await this.usersService.findUserById(+userId);
     return JSON.stringify(user);

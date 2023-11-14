@@ -1,19 +1,18 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { User } from '@app/shared/entities/user.entity';
+import { User } from '@app/shared/be-users/entities/user.entity';
 import { UsersService } from './users.service';
-import { LoginUserInput } from './dto/login-user.input';
-import { LoginResponse } from './dto/login-response';
-import { CreateUserInput } from './dto/register-user.input';
+import { LoginUserInput } from '@app/shared/be-users/dto/login-user.input';
+import { LoginResponse } from '@app/shared/be-users/dto/login-response';
+import { CreateUserInput } from '@app/shared/be-users/dto/register-user.input';
 import { MessagePattern } from '@nestjs/microservices';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
-  @MessagePattern('get_user')
+  @MessagePattern('get-user')
   @Query(() => [User])
   findAllUsers(): Promise<User[]> {
-    console.log('AAAA');
     return this.usersService.findAllUsers();
   }
 

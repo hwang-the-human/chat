@@ -8,9 +8,10 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { ChatsService } from './chats.service';
-import { CreateChatInput } from './dto/create-chat.input';
-import { Chat } from '@app/shared/entities/chat.entity';
-import { User } from '@app/shared/entities/user.entity';
+import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';
+import { Chat } from '@app/shared/be-chats/entities/chat.entity';
+import { User } from '@app/shared/be-users/entities/user.entity';
+import { Observable } from 'rxjs';
 
 @Resolver(() => Chat)
 export class ChatsResolver {
@@ -36,12 +37,12 @@ export class ChatsResolver {
   }
 
   @ResolveField(() => User)
-  sender(@Parent() chat: Chat) {
+  sender(@Parent() chat: Chat): Observable<User> {
     return this.chatsService.findUserById(chat.senderId);
   }
 
   @ResolveField(() => User)
-  receiver(@Parent() chat: Chat) {
+  receiver(@Parent() chat: Chat): Observable<User> {
     return this.chatsService.findUserById(chat.receiverId);
   }
 }

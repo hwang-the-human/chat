@@ -1,3 +1,3 @@
-export * from './entities/user.entity';
-export * from './entities/chat_message.entity';
-export * from './entities/chat.entity';
+export * from './be-users';
+export * from './be-chats';
+export * from './be-chat-messages';

@@ -1,13 +1,13 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsNumber } from 'class-validator';
 
 @InputType()
 export class CreateChatInput {
   @IsNumber()
-  @Field()
+  @Field(() => Int)
   senderId: number;
 
   @IsNumber()
-  @Field()
+  @Field(() => Int)
   receiverId: number;
 }

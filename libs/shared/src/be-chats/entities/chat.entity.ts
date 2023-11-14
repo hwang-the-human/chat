@@ -7,7 +7,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from '@app/shared/entities/user.entity';
+import { User } from '@app/shared/be-users/entities/user.entity';
 
 @Entity()
 @ObjectType()
