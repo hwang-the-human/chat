@@ -1,16 +1,25 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  OneToOne,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '@app/shared/be-users/entities/user.entity';
 
 @Entity()
 @ObjectType()
 export class ChatMessage {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  @Field(() => Int)
+  id: number;
+
   @Column()
   @Field(() => Int)
   senderId: number;
 
-  @PrimaryColumn()
   @Column()
   @Field(() => Int)
   receiverId: number;
