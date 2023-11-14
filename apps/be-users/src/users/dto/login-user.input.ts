@@ -5,7 +5,7 @@ import { IsPhoneNumber } from 'class-validator';
 export class LoginUserInput {
   @IsPhoneNumber()
   @Field()
-  phone_number: string;
+  phoneNumber: string;
 
   @Field()
   password: string;

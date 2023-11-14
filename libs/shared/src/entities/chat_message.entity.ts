@@ -18,5 +18,5 @@ export class ChatMessage {
 
   @CreateDateColumn()
   @Field()
-  created_at: Date;
+  createdAt: Date;
 }

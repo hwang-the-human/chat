@@ -2,11 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Chat {
+type User {
   id: Int!
-  sender_id: Int!
-  receiver_id: Int!
-  created_at: DateTime!
+  firstName: String!
+  lastName: String!
+  phoneNumber: String!
+  password: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """
@@ -14,7 +17,17 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Chat {
+  id: Int!
+  senderId: Int!
+  receiverId: Int!
+  sender: User!
+  receiver: User!
+  createdAt: DateTime!
+}
+
 type Query {
+  findAllChats: [Chat!]!
   findUserChats(sender_id: Int!): [Chat!]!
 }
 
@@ -23,6 +36,6 @@ type Mutation {
 }
 
 input CreateChatInput {
-  sender_id: Float!
-  receiver_id: Float!
+  senderId: Float!
+  receiverId: Float!
 }

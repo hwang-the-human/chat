@@ -25,7 +25,7 @@ export class UsersService {
 
   async registerUser(createUserInput: CreateUserInput): Promise<User> {
     const user = await this.usersRepository.findOneBy({
-      phone_number: createUserInput.phone_number,
+      phoneNumber: createUserInput.phoneNumber,
     });
 
     if (user) throw new BadRequestException('This phone number already exist!');
@@ -44,7 +44,7 @@ export class UsersService {
 
   async loginUser(loginUserInput: LoginUserInput): Promise<LoginResponse> {
     const user = await this.usersRepository.findOneBy({
-      phone_number: loginUserInput.phone_number,
+      phoneNumber: loginUserInput.phoneNumber,
     });
 
     if (!user) throw new UnauthorizedException();
@@ -57,7 +57,7 @@ export class UsersService {
     if (!isMatch) throw new UnauthorizedException();
 
     const access_token = await this.jwtService.signAsync({
-      username: user.phone_number,
+      username: user.phoneNumber,
       sub: user.id,
     });
 
@@ -67,24 +67,24 @@ export class UsersService {
     };
   }
 
-  findAllUsers(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAllUsers(): Promise<User[]> {
+    return await this.usersRepository.find();
   }
 
-  async findUserById(user_id: number): Promise<User> {
-    const user = await this.usersRepository.findOneBy({ id: user_id });
+  async findUserById(userId: number): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ id: userId });
 
     if (!user) throw new NotFoundException('User not found');
 
     return user;
   }
 
-  async removeUserById(user_id: number): Promise<any> {
-    const user = await this.usersRepository.findOneBy({ id: user_id });
+  async removeUserById(userId: number): Promise<any> {
+    const user = await this.usersRepository.findOneBy({ id: userId });
 
     if (!user) throw new NotFoundException('User not found');
 
-    await this.usersRepository.delete({ id: user_id });
+    await this.usersRepository.delete({ id: userId });
 
     return user;
   }

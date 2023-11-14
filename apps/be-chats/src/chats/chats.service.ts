@@ -3,18 +3,31 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Chat } from '@app/shared/entities/chat.entity';
 import { CreateChatInput } from './dto/create-chat.input';
+import { Inject, OnModuleInit } from '@nestjs/common';
+import { ClientKafka } from '@nestjs/microservices';
+import { User } from '@app/shared/entities/user.entity';
+import { Observable } from 'rxjs';
 
 @Injectable()
-export class ChatsService {
+export class ChatsService implements OnModuleInit {
   constructor(
     @InjectRepository(Chat)
-    private chatsRepository: Repository<Chat>
+    private chatsRepository: Repository<Chat>,
+    @Inject('USERS_SERVICE') private readonly usersClient: ClientKafka
   ) {}
+
+  onModuleInit() {
+    this.usersClient.subscribeToResponseOf('get_user');
+  }
+
+  async findAllChats(): Promise<Chat[]> {
+    return await this.chatsRepository.find();
+  }
 
   async createChat(createChatInput: CreateChatInput): Promise<Chat> {
     const chat = await this.chatsRepository.findOneBy({
-      sender_id: createChatInput.sender_id,
-      receiver_id: createChatInput.receiver_id,
+      senderId: createChatInput.senderId,
+      receiverId: createChatInput.receiverId,
     });
 
     if (chat) throw new BadRequestException('Chat is already exist!');
@@ -26,7 +39,11 @@ export class ChatsService {
 
   async findUserChats(sender_id: number): Promise<Chat[]> {
     return await this.chatsRepository.findBy({
-      sender_id: sender_id,
+      senderId: sender_id,
     });
+  }
+
+  findUserById(userId: number) {
+    return this.usersClient.send('get_user', JSON.stringify(userId));
   }
 }

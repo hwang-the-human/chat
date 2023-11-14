@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { User } from '@app/shared/entities/user.entity';
 
@@ -12,18 +13,28 @@ import { User } from '@app/shared/entities/user.entity';
 @ObjectType()
 export class Chat {
   @PrimaryGeneratedColumn()
-  @Field((type) => Int)
+  @Field(() => Int)
   id: number;
 
   @Column()
-  @Field((type) => Int)
-  sender_id: number;
+  @Field(() => Int)
+  senderId: number;
 
   @Column()
-  @Field((type) => Int)
-  receiver_id: number;
+  @Field(() => Int)
+  receiverId: number;
+
+  @OneToOne(() => User, (user) => user.chatSender)
+  @Field(() => User)
+  @JoinColumn()
+  sender: User;
+
+  @OneToOne(() => User, (user) => user.chatReceiver)
+  @JoinColumn()
+  @Field(() => User)
+  receiver: User;
 
   @CreateDateColumn()
   @Field()
-  created_at: Date;
+  createdAt: Date;
 }

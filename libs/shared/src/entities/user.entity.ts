@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToOne,
 } from 'typeorm';
+import { Chat } from '@app/shared/entities/chat.entity';
 
 @Entity()
 @ObjectType()
@@ -15,15 +17,15 @@ export class User {
 
   @Column()
   @Field()
-  first_name: string;
+  firstName: string;
 
   @Column()
   @Field()
-  last_name: string;
+  lastName: string;
 
   @Column()
   @Field()
-  phone_number: string;
+  phoneNumber: string;
 
   @Column()
   @Field()
@@ -31,9 +33,15 @@ export class User {
 
   @CreateDateColumn()
   @Field()
-  created_at: Date;
+  createdAt: Date;
 
   @CreateDateColumn()
   @Field()
-  updated_at: Date;
+  updatedAt: Date;
+
+  @OneToOne(() => Chat, (chat) => chat.sender)
+  chatSender: Chat;
+
+  @OneToOne(() => Chat, (chat) => chat.receiver)
+  chatReceiver: Chat;
 }

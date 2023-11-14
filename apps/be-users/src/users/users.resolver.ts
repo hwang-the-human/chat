@@ -4,13 +4,16 @@ import { UsersService } from './users.service';
 import { LoginUserInput } from './dto/login-user.input';
 import { LoginResponse } from './dto/login-response';
 import { CreateUserInput } from './dto/register-user.input';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
+  @MessagePattern('get_user')
   @Query(() => [User])
   findAllUsers(): Promise<User[]> {
+    console.log('AAAA');
     return this.usersService.findAllUsers();
   }
 
@@ -28,15 +31,15 @@ export class UsersResolver {
 
   @Query(() => User)
   findUserById(
-    @Args('user_id', { type: () => Int }) user_id: number
+    @Args('userId', { type: () => Int }) userId: number
   ): Promise<User> {
-    return this.usersService.findUserById(user_id);
+    return this.usersService.findUserById(userId);
   }
 
   @Query(() => User)
   removeUserById(
-    @Args('user_id', { type: () => Int }) user_id: number
+    @Args('userId', { type: () => Int }) userId: number
   ): Promise<User> {
-    return this.usersService.removeUserById(user_id);
+    return this.usersService.removeUserById(userId);
   }
 }

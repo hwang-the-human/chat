@@ -5,15 +5,15 @@ import { IsAlpha, IsPhoneNumber } from 'class-validator';
 export class CreateUserInput {
   @IsAlpha()
   @Field()
-  first_name: string;
+  firstName: string;
 
   @IsAlpha()
   @Field()
-  last_name: string;
+  lastName: string;
 
   @IsPhoneNumber()
   @Field()
-  phone_number: string;
+  phoneNumber: string;
 
   @Field()
   password: string;

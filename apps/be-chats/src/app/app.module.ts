@@ -7,6 +7,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ChatsModule } from '../chats/chats.module';
+import { ChatsService } from '../chats/chats.service';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { ChatsModule } from '../chats/chats.module';
     ConfigModule.forRoot({ isGlobal: true }),
     ChatsModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [AppService],
 })
 export class AppModule {}

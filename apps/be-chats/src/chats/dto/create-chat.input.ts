@@ -5,9 +5,9 @@ import { IsNumber } from 'class-validator';
 export class CreateChatInput {
   @IsNumber()
   @Field()
-  sender_id: number;
+  senderId: number;
 
   @IsNumber()
   @Field()
-  receiver_id: number;
+  receiverId: number;
 }
