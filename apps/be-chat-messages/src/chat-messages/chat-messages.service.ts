@@ -13,7 +13,7 @@ export class ChatMessagesService implements OnModuleInit {
   constructor(
     @InjectRepository(ChatMessage)
     private chatMessagesRepository: Repository<ChatMessage>,
-    @Inject('USERS_SERVICE') private readonly usersClient: ClientKafka
+    @Inject('USERS_SERVICE') private readonly usersClient: ClientKafka,
     @Inject('CHATS_SERVICE') private readonly chatsClient: ClientKafka
   ) {}
 
@@ -28,7 +28,7 @@ export class ChatMessagesService implements OnModuleInit {
   async createChatMessage(
     createChatMessageInput: CreateChatMessageInput
   ): Promise<ChatMessage> {
-    this.chatsClient.emit("create-chat", "");
+    this.chatsClient.emit('create-chat', '');
     const newChat = this.chatMessagesRepository.create(createChatMessageInput);
     return await this.chatMessagesRepository.save(newChat);
   }
