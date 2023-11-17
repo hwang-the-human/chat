@@ -4,13 +4,11 @@ import { UsersService } from './users.service';
 import { LoginUserInput } from '@app/shared/be-users/dto/login-user.input';
 import { LoginResponse } from '@app/shared/be-users/dto/login-response';
 import { CreateUserInput } from '@app/shared/be-users/dto/register-user.input';
-import { MessagePattern } from '@nestjs/microservices';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
-  @MessagePattern('get-user')
   @Query(() => [User])
   findAllUsers(): Promise<User[]> {
     return this.usersService.findAllUsers();
