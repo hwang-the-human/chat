@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './app/app';
-// import './index.css';
+import './index.css';
 import { ThemeProvider } from '@material-tailwind/react';
 
 const root = ReactDOM.createRoot(
@@ -11,10 +11,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StrictMode>
-    <ThemeProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider>
         <App />
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   </StrictMode>
 );
