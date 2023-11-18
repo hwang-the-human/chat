@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type UserEntity {
   id: Int!
   firstName: String!
   lastName: String!
@@ -18,18 +18,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type LoginResponse {
-  user: User!
+  user: UserEntity!
   access_token: String!
 }
 
 type Query {
-  findAllUsers: [User!]!
-  findUserById(userId: Int!): User!
-  removeUserById(userId: Int!): User!
+  findAllUsers: [UserEntity!]!
+  findUserById(userId: Int!): UserEntity!
+  removeUserById(userId: Int!): UserEntity!
 }
 
 type Mutation {
-  registerUser(createUserInput: CreateUserInput!): User!
+  registerUser(createUserInput: CreateUserInput!): UserEntity!
   loginUser(loginUserInput: LoginUserInput!): LoginResponse!
 }
 

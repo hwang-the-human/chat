@@ -9,40 +9,46 @@ import {
 } from '@nestjs/graphql';
 import { ChatsService } from './chats.service';
 import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';
-import { Chat } from '@app/shared/be-chats/entities/chat.entity';
-import { User } from '@app/shared/be-users/entities/user.entity';
+import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
+import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { Observable } from 'rxjs';
+import { PaginationChatOptionsInput } from '@app/shared/be-chats/dto/paginate-chats.input';
+import { PaginationChatResponse } from '@app/shared/be-chats/dto/paginate-chats-response';
 
-@Resolver(() => Chat)
+@Resolver(() => ChatEntity)
 export class ChatsResolver {
   constructor(private chatsService: ChatsService) {}
 
-  @Query(() => [Chat])
-  findAllChats(): Promise<Chat[]> {
+  @Query(() => [ChatEntity])
+  findAllChats(): Promise<ChatEntity[]> {
     return this.chatsService.findAllChats();
   }
 
-  @Query(() => [Chat])
+  @Query(() => PaginationChatResponse)
   findUserChats(
-    @Args('sender_id', { type: () => Int }) sender_id: number
-  ): Promise<Chat[]> {
-    return this.chatsService.findUserChats(sender_id);
+    @Args('senderId', { type: () => Int })
+    senderId: number,
+    @Args('options', { type: () => PaginationChatOptionsInput })
+    options: PaginationChatOptionsInput
+  ): Promise<PaginationChatResponse> {
+    return this.chatsService.findUserChats(senderId, options);
   }
 
-  @Mutation(() => Chat)
+  @Mutation(() => ChatEntity)
   createChat(
-    @Args('createChatInput') createChatInput: CreateChatInput
-  ): Promise<Chat> {
+    @Args('createChatInput', { type: () => CreateChatInput })
+    createChatInput: CreateChatInput
+  ): Promise<ChatEntity> {
     return this.chatsService.createChat(createChatInput);
   }
 
-  @ResolveField(() => User)
-  sender(@Parent() chat: Chat): Observable<User> {
+  @ResolveField(() => UserEntity)
+  sender(@Parent() chat: ChatEntity): Observable<UserEntity> {
     return this.chatsService.findUserById(chat.senderId);
   }
 
-  @ResolveField(() => User)
-  receiver(@Parent() chat: Chat): Observable<User> {
+  @ResolveField(() => UserEntity)
+  receiver(@Parent() chat: ChatEntity): Observable<UserEntity> {
     return this.chatsService.findUserById(chat.receiverId);
   }
 }

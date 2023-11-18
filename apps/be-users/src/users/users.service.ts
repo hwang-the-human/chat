@@ -10,20 +10,20 @@ import { ConfigService } from '@nestjs/config';
 import { CreateUserInput } from '@app/shared/be-users/dto/register-user.input';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@app/shared/be-users/entities/user.entity';
+import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { LoginUserInput } from '@app/shared/be-users/dto/login-user.input';
 import { LoginResponse } from '@app/shared/be-users/dto/login-response';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>,
     private configService: ConfigService,
     private jwtService: JwtService
   ) {}
 
-  async registerUser(createUserInput: CreateUserInput): Promise<User> {
+  async registerUser(createUserInput: CreateUserInput): Promise<UserEntity> {
     const user = await this.usersRepository.findOneBy({
       phoneNumber: createUserInput.phoneNumber,
     });
@@ -67,11 +67,11 @@ export class UsersService {
     };
   }
 
-  async findAllUsers(): Promise<User[]> {
+  async findAllUsers(): Promise<UserEntity[]> {
     return await this.usersRepository.find();
   }
 
-  async findUserById(userId: number): Promise<User> {
+  async findUserById(userId: number): Promise<UserEntity> {
     const user = await this.usersRepository.findOneBy({ id: userId });
 
     if (!user) throw new NotFoundException('User not found');

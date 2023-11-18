@@ -8,34 +8,34 @@ import {
 } from '@nestjs/graphql';
 import { ChatMessagesService } from './chat-messages.service';
 import { CreateChatMessageInput } from '@app/shared/be-chat-messages/dto/create-chat-message.input';
-import { ChatMessage } from '@app/shared/be-chat-messages/entities/chat-message.entity';
-import { User } from '@app/shared/be-users/entities/user.entity';
+import { ChatMessageEntity } from '@app/shared/be-chat-messages/entities/chat-message.entity';
+import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { Observable } from 'rxjs';
 
-@Resolver(() => ChatMessage)
+@Resolver(() => ChatMessageEntity)
 export class ChatMessagesResolver {
   constructor(private chatMessagesService: ChatMessagesService) {}
 
-  @Query(() => [ChatMessage])
-  findAllChatMessages(): Promise<ChatMessage[]> {
+  @Query(() => [ChatMessageEntity])
+  findAllChatMessages(): Promise<ChatMessageEntity[]> {
     return this.chatMessagesService.findAllChatMessages();
   }
 
-  @Mutation(() => ChatMessage)
+  @Mutation(() => ChatMessageEntity)
   createChatMessage(
-    @Args('createChatMessageInput')
+    @Args('createChatMessageInput', { type: () => CreateChatMessageInput })
     createChatMessageInput: CreateChatMessageInput
-  ): Promise<ChatMessage> {
+  ): Promise<ChatMessageEntity> {
     return this.chatMessagesService.createChatMessage(createChatMessageInput);
   }
 
-  @ResolveField(() => User)
-  sender(@Parent() chatMessage: ChatMessage): Observable<User> {
+  @ResolveField(() => UserEntity)
+  sender(@Parent() chatMessage: ChatMessageEntity): Observable<UserEntity> {
     return this.chatMessagesService.findUserById(chatMessage.senderId);
   }
 
-  @ResolveField(() => User)
-  receiver(@Parent() chatMessage: ChatMessage): Observable<User> {
+  @ResolveField(() => UserEntity)
+  receiver(@Parent() chatMessage: ChatMessageEntity): Observable<UserEntity> {
     return this.chatMessagesService.findUserById(chatMessage.receiverId);
   }
 }

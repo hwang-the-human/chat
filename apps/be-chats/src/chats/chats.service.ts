@@ -1,18 +1,20 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Chat } from '@app/shared/be-chats/entities/chat.entity';
+import { Like, Repository } from 'typeorm';
+import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
 import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';
 import { Inject, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, EventPattern } from '@nestjs/microservices';
-import { User } from '@app/shared/be-users/entities/user.entity';
-import { Observable } from 'rxjs';
+import { UserEntity } from '@app/shared/be-users/entities/user.entity';
+import { Observable, timeout } from 'rxjs';
+import { PaginationChatOptionsInput } from '@app/shared/be-chats/dto/paginate-chats.input';
+import { PaginationChatResponse } from '@app/shared/be-chats/dto/paginate-chats-response';
 
 @Injectable()
 export class ChatsService implements OnModuleInit {
   constructor(
-    @InjectRepository(Chat)
-    private chatsRepository: Repository<Chat>,
+    @InjectRepository(ChatEntity)
+    private readonly chatsRepository: Repository<ChatEntity>,
     @Inject('USERS_SERVICE') private readonly usersClient: ClientKafka
   ) {}
 
@@ -20,31 +22,47 @@ export class ChatsService implements OnModuleInit {
     this.usersClient.subscribeToResponseOf('get-user');
   }
 
-  async findAllChats(): Promise<Chat[]> {
+  async findAllChats(): Promise<ChatEntity[]> {
     return await this.chatsRepository.find();
   }
 
-  @EventPattern('create-chat')
-  async createChat(createChatInput: CreateChatInput): Promise<Chat> {
+  async findUserChats(
+    senderId: number,
+    options: PaginationChatOptionsInput
+  ): Promise<PaginationChatResponse> {
+    const take = options.limit || 10;
+    const skip = options.page || 0;
+
+    const [result, total] = await this.chatsRepository.findAndCount({
+      where: { senderId: senderId },
+      // order: { id: 'DESC' },
+      take: take,
+      skip: skip,
+    });
+
+    return {
+      items: result,
+      totalItems: total,
+    };
+  }
+
+  async createChat(createChatInput: CreateChatInput): Promise<ChatEntity> {
     const chat = await this.chatsRepository.findOneBy({
       senderId: createChatInput.senderId,
       receiverId: createChatInput.receiverId,
     });
 
-    if (chat) throw new BadRequestException('Chat is already exist!');
+    // if (chat) throw new BadRequestException('Chat is already exist!');
+    if (chat) return;
 
     const newChat = this.chatsRepository.create(createChatInput);
 
     return await this.chatsRepository.save(newChat);
   }
 
-  async findUserChats(sender_id: number): Promise<Chat[]> {
-    return await this.chatsRepository.findBy({
-      senderId: sender_id,
-    });
-  }
-
-  findUserById(userId: number): Observable<User> {
-    return this.usersClient.send('get-user', JSON.stringify(userId));
+  findUserById(userId: number): Observable<UserEntity> {
+    return this.usersClient
+      .send('get-user', JSON.stringify(userId))
+      .pipe(timeout(5000));
   }
 }

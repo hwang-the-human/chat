@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ChatMessage } from '@app/shared/be-chat-messages/entities/chat-message.entity';
-import { User } from '@app/shared/be-users/entities/user.entity';
+import { ChatMessageEntity } from '@app/shared/be-chat-messages/entities/chat-message.entity';
+import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { ChatMessagesResolver } from './chat-messages.resolver';
 import { ChatMessagesService } from './chat-messages.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ChatMessage, User]),
+    TypeOrmModule.forFeature([ChatMessageEntity, UserEntity, ChatEntity]),
     ClientsModule.register([
       {
         name: 'USERS_SERVICE',
@@ -24,7 +25,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         },
       },
     ]),
-
     ClientsModule.register([
       {
         name: 'CHATS_SERVICE',

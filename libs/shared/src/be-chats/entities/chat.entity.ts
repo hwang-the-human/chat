@@ -7,11 +7,11 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from '@app/shared/be-users/entities/user.entity';
+import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 
-@Entity()
+@Entity('chats')
 @ObjectType()
-export class Chat {
+export class ChatEntity {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;
@@ -24,15 +24,15 @@ export class Chat {
   @Field(() => Int)
   receiverId: number;
 
-  @OneToOne(() => User, (user) => user.chatSender)
-  @Field(() => User)
+  @OneToOne(() => UserEntity, (user) => user.chatSender)
+  @Field(() => UserEntity)
   @JoinColumn()
-  sender: User;
+  sender: UserEntity;
 
-  @OneToOne(() => User, (user) => user.chatReceiver)
+  @OneToOne(() => UserEntity, (user) => user.chatReceiver)
+  @Field(() => UserEntity)
   @JoinColumn()
-  @Field(() => User)
-  receiver: User;
+  receiver: UserEntity;
 
   @CreateDateColumn()
   @Field()

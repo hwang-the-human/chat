@@ -6,13 +6,14 @@ import {
   CreateDateColumn,
   OneToOne,
 } from 'typeorm';
-import { Chat } from '@app/shared/be-chats/entities/chat.entity';
+import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
+import { ChatMessageEntity } from '@app/shared/be-chat-messages/entities/chat-message.entity';
 
-@Entity()
+@Entity('users')
 @ObjectType()
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => Int)
+  @Field(() => Int)
   id: number;
 
   @Column()
@@ -39,9 +40,15 @@ export class User {
   @Field()
   updatedAt: Date;
 
-  @OneToOne(() => Chat, (chat) => chat.sender)
-  chatSender: Chat;
+  @OneToOne(() => ChatEntity, (chat) => chat.sender)
+  chatSender: ChatEntity;
 
-  @OneToOne(() => Chat, (chat) => chat.receiver)
-  chatReceiver: Chat;
+  @OneToOne(() => ChatEntity, (chat) => chat.receiver)
+  chatReceiver: ChatEntity;
+
+  @OneToOne(() => ChatMessageEntity, (chatMessage) => chatMessage.sender)
+  chatMessageSender: ChatMessageEntity;
+
+  @OneToOne(() => ChatMessageEntity, (chatMessage) => chatMessage.receiver)
+  chatMessageReceiver: ChatMessageEntity;
 }

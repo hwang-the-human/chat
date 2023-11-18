@@ -17,35 +17,26 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type ChatEntity {
+type ChatMessageEntity {
   id: Int!
   senderId: Int!
   receiverId: Int!
   sender: UserEntity!
   receiver: UserEntity!
+  content: String!
   createdAt: DateTime!
 }
 
-type PaginationChatResponse {
-  items: [ChatEntity!]!
-  totalItems: Int!
-}
-
 type Query {
-  findAllChats: [ChatEntity!]!
-  findUserChats(senderId: Int!, options: PaginationChatOptionsInput!): PaginationChatResponse!
-}
-
-input PaginationChatOptionsInput {
-  page: Int!
-  limit: Int!
+  findAllChatMessages: [ChatMessageEntity!]!
 }
 
 type Mutation {
-  createChat(createChatInput: CreateChatInput!): ChatEntity!
+  createChatMessage(createChatMessageInput: CreateChatMessageInput!): ChatMessageEntity!
 }
 
-input CreateChatInput {
+input CreateChatMessageInput {
   senderId: Int!
   receiverId: Int!
+  content: String!
 }
