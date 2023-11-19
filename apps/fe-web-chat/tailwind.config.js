@@ -3,7 +3,7 @@ const { join } = require('path');
 const withMT = require('@material-tailwind/react/utils/withMT');
 
 /** @type {import('tailwindcss').Config} */
-module.exports = withMT({
+module.exports = {
   content: [
     join(
       __dirname,
@@ -17,4 +17,4 @@ module.exports = withMT({
     extend: {},
   },
   plugins: [],
-});
+};
