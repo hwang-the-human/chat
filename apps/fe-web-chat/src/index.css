@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body {
-  background-color: aliceblue;
+  background-color: #111b21;
+  overflow: hidden;
   /* height: 100vh;
   background-color: red;
   margin: 0;
@@ -14,4 +15,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   overflow: hidden; */
+}
+
+p {
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #384045;
+  border-radius: 10px;
 }

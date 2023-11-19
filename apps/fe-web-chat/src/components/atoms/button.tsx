@@ -7,5 +7,9 @@ interface Props {
 }
 
 export default function Button({ label, onClick }: Props) {
-  return <MButton onClick={onClick}>{label}</MButton>;
+  return (
+    <MButton color={'white'} onClick={onClick}>
+      {label}
+    </MButton>
+  );
 }

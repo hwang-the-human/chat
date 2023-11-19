@@ -35,7 +35,7 @@ export default function registration({}: Props) {
   }
   return (
     <div className="flex h-screen items-center justify-center">
-      <div className="flex flex-col gap-4 box-border p-7 rounded-lg border border-gray-300 w-1/3">
+      <div className="flex flex-col gap-5 box-border p-7 rounded-lg border border-gray-400 w-1/3 bg-secondary">
         <TextField
           label={'Phone number'}
           value={values.phoneNumber}
@@ -64,8 +64,8 @@ export default function registration({}: Props) {
           path={'password'}
         />
 
-        <div className="flex flex-col items-center text-xs gap-2">
-          <p>Already have an account yet?</p>
+        <div className="flex flex-col items-center text-xs">
+          <p className="text-gray-400">Already have an account yet?</p>
           <p
             className="cursor-pointer text-sky-500 underline"
             onClick={handleNavigate}

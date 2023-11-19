@@ -13,7 +13,7 @@
         "outputPath": "dist/apps/fe-web-chat",
         "index": "apps/fe-web-chat/src/index.html",
         "baseHref": "/",
-        "main": "apps/fe-web-chat/src/main.tsx",
+        "main": "apps/fe-web-chat/src/index.tsx",
         "tsConfig": "apps/fe-web-chat/tsconfig.app.json",
         "assets": [
           "apps/fe-web-chat/src/favicon.ico",
