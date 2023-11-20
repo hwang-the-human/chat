@@ -61,8 +61,6 @@ export class ChatsService implements OnModuleInit {
   }
 
   findUserById(userId: number): Observable<UserEntity> {
-    return this.usersClient
-      .send('get-user', JSON.stringify(userId))
-      .pipe(timeout(5000));
+    return this.usersClient.send('get-user', userId).pipe(timeout(5000));
   }
 }

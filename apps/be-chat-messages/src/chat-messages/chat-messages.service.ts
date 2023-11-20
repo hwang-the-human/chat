@@ -29,21 +29,16 @@ export class ChatMessagesService implements OnModuleInit {
   async createChatMessage(
     createChatMessageInput: CreateChatMessageInput
   ): Promise<ChatMessageEntity> {
-    this.chatsClient.emit(
-      'create-chat',
-      JSON.stringify({
-        senderId: createChatMessageInput.senderId,
-        receiverId: createChatMessageInput.receiverId,
-      } satisfies CreateChatInput)
-    );
+    this.chatsClient.emit('create-chat', {
+      senderId: createChatMessageInput.senderId,
+      receiverId: createChatMessageInput.receiverId,
+    } satisfies CreateChatInput);
 
     const newChat = this.chatMessagesRepository.create(createChatMessageInput);
     return await this.chatMessagesRepository.save(newChat);
   }
 
   findUserById(userId: number): Observable<UserEntity> {
-    return this.usersClient
-      .send('get-user', JSON.stringify(userId))
-      .pipe(timeout(5000));
+    return this.usersClient.send('get-user', userId).pipe(timeout(5000));
   }
 }
