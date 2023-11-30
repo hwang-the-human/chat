@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  be-users:
+    build:
+      context: .
+      dockerfile: apps/be-users/Dockerfile
+    ports:
+      - 3050:3050
+  # be-users:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/be-users/Dockerfile
+  #   ports:
+  #     - 3000:3000
+  # depends_on:
+  #   - app2
+  #   - app3
+
+  # app2:
+  #   build:
+  #     context: ./apps/app2
+  #   ports:
+  #     - '3002:3002'
+  #   depends_on:
+  #     - app3
+
+  # app3:
+  #   build:
+  #     context: ./apps/app3
+  #   ports:
+  #     - '3003:3003'

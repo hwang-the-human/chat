@@ -1,0 +1,91 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: confluent-ingress
+  annotations:
+    # nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
+    # nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    # ingress.kubernetes.io/ssl-passthrough: 'true'
+    # nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+spec:
+  ingressClassName: nginx
+  # tls:
+  #   - hosts:
+  #       - kafka.hwang-chat.com
+  #       - b0.hwang-chat.com
+  #       - b1.hwang-chat.com
+  #       - b2.hwang-chat.com
+  #       - controlcenter.hwang-chat.com
+  #       - ksqldb.hwang-chat.com
+  #       - connect.hwang-chat.com
+  rules:
+    - host: kafka.hwang-chat.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka-bootstrap
+                port:
+                  number: 9092
+    - host: b0.hwang-chat.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka-0-internal
+                port:
+                  number: 9092
+    - host: b1.hwang-chat.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka-1-internal
+                port:
+                  number: 9092
+    - host: b2.hwang-chat.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka-2-internal
+                port:
+                  number: 9092
+    - host: controlcenter.hwang-chat.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: controlcenter-0-internal
+                port:
+                  number: 9021
+    - host: ksqldb.hwang-chat.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ksqldb-bootstrap
+                port:
+                  number: 8088
+    - host: connect.hwang-chat.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: connect-bootstrap
+                port:
+                  number: 8083

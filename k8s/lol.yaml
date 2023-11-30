@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: apps
+  name: lol-deployment
+  labels:
+    app: lol
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lol
+  template:
+    metadata:
+      labels:
+        app: lol
+    spec:
+      containers:
+        - name: lol-container
+          image: chat-lol:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3050
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lol-service
+  namespace: apps
+spec:
+  type: ClusterIP
+  selector:
+    app: lol
+  ports:
+    - protocol: TCP
+      port: 3050
+      targetPort: 3050 # Must match with containerPort in Deployment
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: apps
+  name: my-ingress
+  annotations:
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+    # nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: apps.hwang-chat.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lol-service
+                port:
+                  number: 3050
+# kubens
+# helm repo list | awk '{print $1}' | xargs -L1 helm repo remove
+# sudo vim /etc/hosts
+
+# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+# helm repo update
+
+# helm template ingress-nginx ingress-nginx \
+# --repo https://kubernetes.github.io/ingress-nginx \
+# --version 4.8.3 \
+# --namespace ingress-nginx \
+# > ./ingress/nginx-ingress.1.9.4.yaml
+
+# export TUTORIAL_HOME=desktop/external-access-static-host-based
+# export DOMAIN=hwang-chat.com
