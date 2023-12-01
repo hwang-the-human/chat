@@ -3,10 +3,15 @@ import ChatListHeader from './chatListHeader';
 import { Input, List } from '@material-tailwind/react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import ChatItem from '../../atoms/chatItem';
+import { useQuery } from '@apollo/client';
+import { findAllUsers } from 'apps/fe-web-chat/src/graphql/queries';
 
 interface Props {}
 
 export default function ChatList({}: Props) {
+  const { loading, error, data } = useQuery(findAllUsers);
+
+  console.log('AAAA:', data);
   return (
     <div className="flex flex-col flex-1 h-full border-r border-r-gray-600 overflow-hidden">
       <ChatListHeader />
