@@ -6,6 +6,7 @@ import {
   Int,
   ResolveField,
   Parent,
+  ResolveReference,
 } from '@nestjs/graphql';
 import { ChatsService } from './chats.service';
 import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';

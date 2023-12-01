@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveReference,
+} from '@nestjs/graphql';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { UsersService } from './users.service';
 import { LoginUserInput } from '@app/shared/be-users/dto/login-user.input';
@@ -27,16 +34,24 @@ export class UsersResolver {
   }
 
   @Query(() => UserEntity)
+  removeUserById(
+    @Args('userId', { type: () => Int }) userId: number
+  ): Promise<UserEntity> {
+    return this.usersService.removeUserById(userId);
+  }
+
+  @Query(() => UserEntity)
   findUserById(
     @Args('userId', { type: () => Int }) userId: number
   ): Promise<UserEntity> {
     return this.usersService.findUserById(userId);
   }
 
-  @Query(() => UserEntity)
-  removeUserById(
-    @Args('userId', { type: () => Int }) userId: number
-  ): Promise<UserEntity> {
-    return this.usersService.removeUserById(userId);
+  @ResolveReference()
+  resolveReference(reference: {
+    __typename: string;
+    id: number;
+  }): Promise<UserEntity> {
+    return this.usersService.findUserById(reference.id);
   }
 }

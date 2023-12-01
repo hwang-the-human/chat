@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, Directive, ID } from '@nestjs/graphql';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -11,10 +11,15 @@ import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 
 @Entity('chats')
 @ObjectType()
+@Directive('@key(fields: "id")')
 export class ChatEntity {
   @PrimaryGeneratedColumn()
-  @Field(() => Int)
+  @Field((type) => ID)
   id: number;
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: Date;
 
   @Column()
   @Field(() => Int)
@@ -33,8 +38,4 @@ export class ChatEntity {
   @Field(() => UserEntity)
   @JoinColumn()
   receiver: UserEntity;
-
-  @CreateDateColumn()
-  @Field()
-  createdAt: Date;
 }
