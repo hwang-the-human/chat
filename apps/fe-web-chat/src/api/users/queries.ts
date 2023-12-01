@@ -1,4 +1,4 @@
-import { graphql } from './users/gql';
+import { graphql } from '../../graphql/gql';
 
 export const findAllUsers = graphql(`
   query FindAllUsers {

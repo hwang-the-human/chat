@@ -73,7 +73,7 @@ export type UserEntity = {
   __typename?: 'UserEntity';
   createdAt: Scalars['DateTime']['output'];
   firstName: Scalars['String']['output'];
-  id: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
   password: Scalars['String']['output'];
   phoneNumber: Scalars['String']['output'];
@@ -83,7 +83,7 @@ export type UserEntity = {
 export type FindAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindAllUsersQuery = { __typename?: 'Query', findAllUsers: Array<{ __typename?: 'UserEntity', id: number, firstName: string }> };
+export type FindAllUsersQuery = { __typename?: 'Query', findAllUsers: Array<{ __typename?: 'UserEntity', id: string, firstName: string }> };
 
 
 export const FindAllUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FindAllUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"findAllUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}}]}}]}}]} as unknown as DocumentNode<FindAllUsersQuery, FindAllUsersQueryVariables>;
