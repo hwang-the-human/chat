@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType, Directive } from '@nestjs/graphql';
+import { Field, ID, ObjectType, Directive, Int } from '@nestjs/graphql';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -11,10 +11,10 @@ import { ChatMessageEntity } from '@app/shared/be-chat-messages/entities/chat-me
 
 @Entity('users')
 @ObjectType()
-@Directive('@key(fields: "id")')
+@Directive('@shareable')
 export class UserEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field((type) => Int)
   id: number;
 
   @Column()

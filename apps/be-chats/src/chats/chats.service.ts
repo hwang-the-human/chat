@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
@@ -24,6 +28,14 @@ export class ChatsService implements OnModuleInit {
 
   async findAllChats(): Promise<ChatEntity[]> {
     return await this.chatsRepository.find();
+  }
+
+  async findChatById(chatId: number): Promise<ChatEntity> {
+    const chat = await this.chatsRepository.findOneBy({ id: chatId });
+
+    if (!chat) throw new NotFoundException('Chat not found');
+
+    return chat;
   }
 
   async findUserChats(

@@ -30,7 +30,7 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe());
 
-  const port = process.env.port || 3000;
+  const port = 3000;
 
   app.use(cors());
   await app.startAllMicroservices();

@@ -52,4 +52,5 @@ export class ChatsResolver {
   receiver(@Parent() chat: ChatEntity): Observable<UserEntity> {
     return this.chatsService.findUserById(chat.receiverId);
   }
+
 }

@@ -46,12 +46,4 @@ export class UsersResolver {
   ): Promise<UserEntity> {
     return this.usersService.findUserById(userId);
   }
-
-  @ResolveReference()
-  resolveReference(reference: {
-    __typename: string;
-    id: number;
-  }): Promise<UserEntity> {
-    return this.usersService.findUserById(reference.id);
-  }
 }
