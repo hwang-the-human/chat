@@ -5,7 +5,7 @@ import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { ChatsResolver } from './chats.resolver';
 import { ChatsService } from './chats.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ChatMessageEntity } from '@app/shared/be-chat-messages/entities/chat-message.entity';
+import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
 import { ChatsController } from './chat.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -17,7 +17,7 @@ import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ChatEntity, UserEntity, ChatMessageEntity]),
+    TypeOrmModule.forFeature([ChatEntity, UserEntity, MessageEntity]),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
       autoSchemaFile: {

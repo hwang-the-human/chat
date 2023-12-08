@@ -3,7 +3,7 @@ import { graphql } from '../../graphql/gql';
 export const findUserChatMessages = graphql(`
   query findUserChatMessages(
     $senderId: Int!
-    $options: PaginationChatMessageOptionsInput
+    $options: PaginationMessageOptionsInput
   ) {
     findUserChatMessages(senderId: $senderId, options: $options) {
       totalItems

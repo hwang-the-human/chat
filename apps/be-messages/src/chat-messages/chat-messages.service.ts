@@ -1,21 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ChatMessageEntity } from '@app/shared/be-chat-messages/entities/chat-message.entity';
-import { CreateChatMessageInput } from '@app/shared/be-chat-messages/dto/create-chat-message.input';
+import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
+import { CreateMessageInput } from '@app/shared/be-messages/dto/create-message.input';
 import { Inject, OnModuleInit } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { Observable, timeout } from 'rxjs';
 import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';
-import { PaginationChatMessagesResponse } from '@app/shared/be-chat-messages/dto/paginate-chat-messages-response';
-import { PaginationChatMessageOptionsInput } from '@app/shared/be-chat-messages/dto/paginate-chat-messages.input';
+import { PaginationMessagesResponse } from '@app/shared/be-messages/dto/paginate-messages-response';
+import { PaginationMessageOptionsInput } from '@app/shared/be-messages/dto/paginate-messages.input';
 
 @Injectable()
 export class ChatMessagesService implements OnModuleInit {
   constructor(
-    @InjectRepository(ChatMessageEntity)
-    private chatMessagesRepository: Repository<ChatMessageEntity>,
+    @InjectRepository(MessageEntity)
+    private chatMessagesRepository: Repository<MessageEntity>,
     @Inject('USERS_SERVICE') private readonly usersClient: ClientKafka,
     @Inject('CHATS_SERVICE') private readonly chatsClient: ClientKafka
   ) {}
@@ -24,27 +24,27 @@ export class ChatMessagesService implements OnModuleInit {
     this.usersClient.subscribeToResponseOf('get-user');
   }
 
-  async findAllChatMessages(): Promise<ChatMessageEntity[]> {
+  async findAllChatMessages(): Promise<MessageEntity[]> {
     return await this.chatMessagesRepository.find();
   }
 
   async createChatMessage(
-    createChatMessageInput: CreateChatMessageInput
-  ): Promise<ChatMessageEntity> {
+    CreateMessageInput: CreateMessageInput
+  ): Promise<MessageEntity> {
     this.chatsClient.emit('create-chat', {
-      senderId: createChatMessageInput.senderId,
-      receiverId: createChatMessageInput.receiverId,
+      senderId: CreateMessageInput.senderId,
+      receiverId: CreateMessageInput.receiverId,
     } satisfies CreateChatInput);
 
-    const newChat = this.chatMessagesRepository.create(createChatMessageInput);
+    const newChat = this.chatMessagesRepository.create(CreateMessageInput);
     return await this.chatMessagesRepository.save(newChat);
   }
 
   async findUserChatMessages(
     senderId: number,
     // receiverId: number,
-    options?: PaginationChatMessageOptionsInput
-  ): Promise<PaginationChatMessagesResponse> {
+    options?: PaginationMessageOptionsInput
+  ): Promise<PaginationMessagesResponse> {
     const take = options?.limit || 10;
     const skip = options?.page || 0;
 

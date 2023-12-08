@@ -11,7 +11,7 @@ import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 
 @Entity('chatMessages')
 @ObjectType()
-export class ChatMessageEntity {
+export class MessageEntity {
   @PrimaryGeneratedColumn()
   @Field((type) => ID)
   id: number;

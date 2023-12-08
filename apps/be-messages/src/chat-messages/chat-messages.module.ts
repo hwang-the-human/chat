@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ChatMessageEntity } from '@app/shared/be-chat-messages/entities/chat-message.entity';
+import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { ChatMessagesResolver } from './chat-messages.resolver';
 import { ChatMessagesService } from './chat-messages.service';
@@ -16,7 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ChatMessageEntity, UserEntity, ChatEntity]),
+    TypeOrmModule.forFeature([MessageEntity, UserEntity, ChatEntity]),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
       autoSchemaFile: {

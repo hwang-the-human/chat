@@ -7,7 +7,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
-import { ChatMessageEntity } from '@app/shared/be-chat-messages/entities/chat-message.entity';
+import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
 
 @Entity('users')
 @ObjectType()
@@ -47,9 +47,9 @@ export class UserEntity {
   @ManyToMany(() => ChatEntity, (chat) => chat.receiver)
   chatReceiver: ChatEntity;
 
-  @ManyToMany(() => ChatMessageEntity, (chatMessage) => chatMessage.sender)
-  chatMessageSender: ChatMessageEntity;
+  @ManyToMany(() => MessageEntity, (chatMessage) => chatMessage.sender)
+  chatMessageSender: MessageEntity;
 
-  @ManyToMany(() => ChatMessageEntity, (chatMessage) => chatMessage.receiver)
-  chatMessageReceiver: ChatMessageEntity;
+  @ManyToMany(() => MessageEntity, (chatMessage) => chatMessage.receiver)
+  chatMessageReceiver: MessageEntity;
 }
