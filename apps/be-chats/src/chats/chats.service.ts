@@ -12,7 +12,7 @@ import { ClientKafka, EventPattern } from '@nestjs/microservices';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { Observable, timeout } from 'rxjs';
 import { PaginationChatOptionsInput } from '@app/shared/be-chats/dto/paginate-chats.input';
-import { PaginationChatResponse } from '@app/shared/be-chats/dto/paginate-chats-response';
+import { PaginationChatsResponse } from '@app/shared/be-chats/dto/paginate-chats-response';
 
 @Injectable()
 export class ChatsService implements OnModuleInit {
@@ -40,10 +40,10 @@ export class ChatsService implements OnModuleInit {
 
   async findUserChats(
     senderId: number,
-    options: PaginationChatOptionsInput
-  ): Promise<PaginationChatResponse> {
-    const take = options.limit || 10;
-    const skip = options.page || 0;
+    options?: PaginationChatOptionsInput
+  ): Promise<PaginationChatsResponse> {
+    const take = options?.limit || 10;
+    const skip = options?.page || 0;
 
     const [result, total] = await this.chatsRepository.findAndCount({
       where: { senderId: senderId },

@@ -3,8 +3,7 @@ import {
   Entity,
   Column,
   CreateDateColumn,
-  OneToOne,
-  OneToMany,
+  ManyToMany,
   JoinColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -12,11 +11,18 @@ import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 
 @Entity('chatMessages')
 @ObjectType()
-@Directive('@key(fields: "id")')
 export class ChatMessageEntity {
   @PrimaryGeneratedColumn()
   @Field((type) => ID)
   id: number;
+
+  @Column()
+  @Field()
+  content: string;
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: Date;
 
   @Column()
   @Field(() => Int)
@@ -26,21 +32,13 @@ export class ChatMessageEntity {
   @Field(() => Int)
   receiverId: number;
 
-  @OneToMany(() => UserEntity, (user) => user.chatMessageSender)
-  @Field(() => UserEntity)
+  @ManyToMany(() => UserEntity, (user) => user.chatMessageSender)
   @JoinColumn()
+  @Field(() => UserEntity)
   sender: UserEntity;
 
-  @OneToMany(() => UserEntity, (user) => user.chatMessageReceiver)
-  @Field(() => UserEntity)
+  @ManyToMany(() => UserEntity, (user) => user.chatMessageReceiver)
   @JoinColumn()
+  @Field(() => UserEntity)
   receiver: UserEntity;
-
-  @Column()
-  @Field()
-  content: string;
-
-  @CreateDateColumn()
-  @Field()
-  createdAt: Date;
 }

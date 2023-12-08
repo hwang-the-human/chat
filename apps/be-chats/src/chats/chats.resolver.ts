@@ -14,7 +14,7 @@ import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { Observable } from 'rxjs';
 import { PaginationChatOptionsInput } from '@app/shared/be-chats/dto/paginate-chats.input';
-import { PaginationChatResponse } from '@app/shared/be-chats/dto/paginate-chats-response';
+import { PaginationChatsResponse } from '@app/shared/be-chats/dto/paginate-chats-response';
 
 @Resolver(() => ChatEntity)
 export class ChatsResolver {
@@ -25,13 +25,13 @@ export class ChatsResolver {
     return this.chatsService.findAllChats();
   }
 
-  @Query(() => PaginationChatResponse)
+  @Query(() => PaginationChatsResponse)
   findUserChats(
     @Args('senderId', { type: () => Int })
     senderId: number,
-    @Args('options', { type: () => PaginationChatOptionsInput })
-    options: PaginationChatOptionsInput
-  ): Promise<PaginationChatResponse> {
+    @Args('options', { type: () => PaginationChatOptionsInput, nullable: true })
+    options?: PaginationChatOptionsInput
+  ): Promise<PaginationChatsResponse> {
     return this.chatsService.findUserChats(senderId, options);
   }
 
@@ -52,5 +52,4 @@ export class ChatsResolver {
   receiver(@Parent() chat: ChatEntity): Observable<UserEntity> {
     return this.chatsService.findUserById(chat.receiverId);
   }
-
 }

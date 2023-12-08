@@ -18,6 +18,38 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type ChatEntity = {
+  __typename?: 'ChatEntity';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  receiver: UserEntity;
+  receiverId: Scalars['Int']['output'];
+  sender: UserEntity;
+  senderId: Scalars['Int']['output'];
+};
+
+export type ChatMessageEntity = {
+  __typename?: 'ChatMessageEntity';
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  receiver: UserEntity;
+  receiverId: Scalars['Int']['output'];
+  sender: UserEntity;
+  senderId: Scalars['Int']['output'];
+};
+
+export type CreateChatInput = {
+  receiverId: Scalars['Int']['input'];
+  senderId: Scalars['Int']['input'];
+};
+
+export type CreateChatMessageInput = {
+  content: Scalars['String']['input'];
+  receiverId: Scalars['Int']['input'];
+  senderId: Scalars['Int']['input'];
+};
+
 export type CreateUserInput = {
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
@@ -38,8 +70,20 @@ export type LoginUserInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createChat: ChatEntity;
+  createChatMessage: ChatMessageEntity;
   loginUser: LoginResponse;
   registerUser: UserEntity;
+};
+
+
+export type MutationCreateChatArgs = {
+  createChatInput: CreateChatInput;
+};
+
+
+export type MutationCreateChatMessageArgs = {
+  createChatMessageInput: CreateChatMessageInput;
 };
 
 
@@ -52,16 +96,54 @@ export type MutationRegisterUserArgs = {
   createUserInput: CreateUserInput;
 };
 
+export type PaginationChatMessageOptionsInput = {
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+};
+
+export type PaginationChatMessagesResponse = {
+  __typename?: 'PaginationChatMessagesResponse';
+  items: Array<ChatMessageEntity>;
+  totalItems: Scalars['Int']['output'];
+};
+
+export type PaginationChatOptionsInput = {
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+};
+
+export type PaginationChatsResponse = {
+  __typename?: 'PaginationChatsResponse';
+  items: Array<ChatEntity>;
+  totalItems: Scalars['Int']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  findAllChatMessages: Array<ChatMessageEntity>;
+  findAllChats: Array<ChatEntity>;
   findAllUsers: Array<UserEntity>;
   findUserById: UserEntity;
+  findUserChatMessages: PaginationChatMessagesResponse;
+  findUserChats: PaginationChatsResponse;
   removeUserById: UserEntity;
 };
 
 
 export type QueryFindUserByIdArgs = {
   userId: Scalars['Int']['input'];
+};
+
+
+export type QueryFindUserChatMessagesArgs = {
+  options?: InputMaybe<PaginationChatMessageOptionsInput>;
+  senderId: Scalars['Int']['input'];
+};
+
+
+export type QueryFindUserChatsArgs = {
+  options?: InputMaybe<PaginationChatOptionsInput>;
+  senderId: Scalars['Int']['input'];
 };
 
 
@@ -73,17 +155,35 @@ export type UserEntity = {
   __typename?: 'UserEntity';
   createdAt: Scalars['DateTime']['output'];
   firstName: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
+  id: Scalars['Int']['output'];
   lastName: Scalars['String']['output'];
   password: Scalars['String']['output'];
   phoneNumber: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type FindUserChatMessagesQueryVariables = Exact<{
+  senderId: Scalars['Int']['input'];
+  options?: InputMaybe<PaginationChatMessageOptionsInput>;
+}>;
+
+
+export type FindUserChatMessagesQuery = { __typename?: 'Query', findUserChatMessages: { __typename?: 'PaginationChatMessagesResponse', totalItems: number, items: Array<{ __typename?: 'ChatMessageEntity', id: string, content: string, createdAt: any, sender: { __typename?: 'UserEntity', id: number, firstName: string, lastName: string }, receiver: { __typename?: 'UserEntity', id: number, firstName: string, lastName: string } }> } };
+
+export type FindUsersChatsQueryVariables = Exact<{
+  senderId: Scalars['Int']['input'];
+  options?: InputMaybe<PaginationChatOptionsInput>;
+}>;
+
+
+export type FindUsersChatsQuery = { __typename?: 'Query', findUserChats: { __typename?: 'PaginationChatsResponse', totalItems: number, items: Array<{ __typename?: 'ChatEntity', id: number, sender: { __typename?: 'UserEntity', id: number, firstName: string, lastName: string }, receiver: { __typename?: 'UserEntity', id: number, firstName: string, lastName: string } }> } };
+
 export type FindAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindAllUsersQuery = { __typename?: 'Query', findAllUsers: Array<{ __typename?: 'UserEntity', id: string, firstName: string }> };
+export type FindAllUsersQuery = { __typename?: 'Query', findAllUsers: Array<{ __typename?: 'UserEntity', id: number, firstName: string }> };
 
 
-export const FindAllUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FindAllUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"findAllUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}}]}}]}}]} as unknown as DocumentNode<FindAllUsersQuery, FindAllUsersQueryVariables>;
+export const FindUserChatMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"findUserChatMessages"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"senderId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"options"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"PaginationChatMessageOptionsInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"findUserChatMessages"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"senderId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"senderId"}}},{"kind":"Argument","name":{"kind":"Name","value":"options"},"value":{"kind":"Variable","name":{"kind":"Name","value":"options"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalItems"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"sender"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"receiver"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]}}]}}]} as unknown as DocumentNode<FindUserChatMessagesQuery, FindUserChatMessagesQueryVariables>;
+export const FindUsersChatsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"findUsersChats"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"senderId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"options"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"PaginationChatOptionsInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"findUserChats"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"senderId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"senderId"}}},{"kind":"Argument","name":{"kind":"Name","value":"options"},"value":{"kind":"Variable","name":{"kind":"Name","value":"options"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalItems"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"sender"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"receiver"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]}}]}}]} as unknown as DocumentNode<FindUsersChatsQuery, FindUsersChatsQueryVariables>;
+export const FindAllUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"findAllUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"findAllUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}}]}}]}}]} as unknown as DocumentNode<FindAllUsersQuery, FindAllUsersQueryVariables>;

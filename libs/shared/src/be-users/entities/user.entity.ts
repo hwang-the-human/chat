@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  OneToOne,
+  ManyToMany,
 } from 'typeorm';
 import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
 import { ChatMessageEntity } from '@app/shared/be-chat-messages/entities/chat-message.entity';
@@ -41,15 +41,15 @@ export class UserEntity {
   @Field()
   updatedAt: Date;
 
-  @OneToOne(() => ChatEntity, (chat) => chat.sender)
+  @ManyToMany(() => ChatEntity, (chat) => chat.sender)
   chatSender: ChatEntity;
 
-  @OneToOne(() => ChatEntity, (chat) => chat.receiver)
+  @ManyToMany(() => ChatEntity, (chat) => chat.receiver)
   chatReceiver: ChatEntity;
 
-  @OneToOne(() => ChatMessageEntity, (chatMessage) => chatMessage.sender)
+  @ManyToMany(() => ChatMessageEntity, (chatMessage) => chatMessage.sender)
   chatMessageSender: ChatMessageEntity;
 
-  @OneToOne(() => ChatMessageEntity, (chatMessage) => chatMessage.receiver)
+  @ManyToMany(() => ChatMessageEntity, (chatMessage) => chatMessage.receiver)
   chatMessageReceiver: ChatMessageEntity;
 }

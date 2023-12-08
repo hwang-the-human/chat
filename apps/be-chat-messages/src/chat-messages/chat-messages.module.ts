@@ -39,34 +39,52 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
     ConfigModule.forRoot({ isGlobal: true }),
-    ClientsModule.register([
+
+    ClientsModule.registerAsync([
       {
-        name: 'USERS_SERVICE',
-        transport: Transport.KAFKA,
-        options: {
-          client: {
-            clientId: 'users',
-            brokers: ['localhost:9092'],
+        imports: [ConfigModule],
+        name: 'CHATS_SERVICE',
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.KAFKA,
+          options: {
+            client: {
+              brokers: [configService.get<string>('KAFKA_BROKER')],
+              ssl: {
+                ca: [configService.get<string>('SSL_CA')],
+                key: configService.get<string>('SSL_KEY'),
+                cert: configService.get<string>('SSL_CERT'),
+              },
+            },
+            consumer: {
+              groupId: 'chats',
+            },
           },
-          consumer: {
-            groupId: 'users',
-          },
-        },
+        }),
+        inject: [ConfigService],
       },
     ]),
-    ClientsModule.register([
+
+    ClientsModule.registerAsync([
       {
-        name: 'CHATS_SERVICE',
-        transport: Transport.KAFKA,
-        options: {
-          client: {
-            clientId: 'chats',
-            brokers: ['localhost:9092'],
+        imports: [ConfigModule],
+        name: 'USERS_SERVICE',
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.KAFKA,
+          options: {
+            client: {
+              brokers: [configService.get<string>('KAFKA_BROKER')],
+              ssl: {
+                ca: [configService.get<string>('SSL_CA')],
+                key: configService.get<string>('SSL_KEY'),
+                cert: configService.get<string>('SSL_CERT'),
+              },
+            },
+            consumer: {
+              groupId: 'users',
+            },
           },
-          consumer: {
-            groupId: 'chats',
-          },
-        },
+        }),
+        inject: [ConfigService],
       },
     ]),
   ],

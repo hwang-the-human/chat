@@ -1,7 +1,7 @@
 import { graphql } from '../../graphql/gql';
 
 export const findAllUsers = graphql(`
-  query FindAllUsers {
+  query findAllUsers {
     findAllUsers {
       id
       firstName

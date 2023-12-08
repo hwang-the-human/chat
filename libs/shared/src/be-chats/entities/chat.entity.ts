@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  OneToOne,
+  ManyToMany,
   JoinColumn,
 } from 'typeorm';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
@@ -28,12 +28,12 @@ export class ChatEntity {
   @Field(() => Int)
   receiverId: number;
 
-  @OneToOne(() => UserEntity, (user) => user.chatSender)
+  @ManyToMany(() => UserEntity, (user) => user.chatSender)
   @JoinColumn()
   @Field(() => UserEntity)
   sender: UserEntity;
 
-  @OneToOne(() => UserEntity, (user) => user.chatReceiver)
+  @ManyToMany(() => UserEntity, (user) => user.chatReceiver)
   @JoinColumn()
   @Field(() => UserEntity)
   receiver: UserEntity;

@@ -14,6 +14,7 @@ import { AppService } from './app.service';
           subgraphs: [
             { name: 'users', url: 'http://localhost:3000/graphql' },
             { name: 'chats', url: 'http://localhost:3001/graphql' },
+            { name: 'chat-messages', url: 'http://localhost:3002/graphql' },
           ],
         }),
       },

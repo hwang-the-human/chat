@@ -48,7 +48,6 @@ import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace
           transport: Transport.KAFKA,
           options: {
             client: {
-              clientId: 'users',
               brokers: [configService.get<string>('KAFKA_BROKER')],
               ssl: {
                 ca: [configService.get<string>('SSL_CA')],

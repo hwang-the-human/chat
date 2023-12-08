@@ -8,6 +8,8 @@ import { ClientKafka } from '@nestjs/microservices';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { Observable, timeout } from 'rxjs';
 import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';
+import { PaginationChatMessagesResponse } from '@app/shared/be-chat-messages/dto/paginate-chat-messages-response';
+import { PaginationChatMessageOptionsInput } from '@app/shared/be-chat-messages/dto/paginate-chat-messages.input';
 
 @Injectable()
 export class ChatMessagesService implements OnModuleInit {
@@ -36,6 +38,34 @@ export class ChatMessagesService implements OnModuleInit {
 
     const newChat = this.chatMessagesRepository.create(createChatMessageInput);
     return await this.chatMessagesRepository.save(newChat);
+  }
+
+  async findUserChatMessages(
+    senderId: number,
+    // receiverId: number,
+    options?: PaginationChatMessageOptionsInput
+  ): Promise<PaginationChatMessagesResponse> {
+    const take = options?.limit || 10;
+    const skip = options?.page || 0;
+
+    const [result, total] = await this.chatMessagesRepository.findAndCount({
+      where: [
+        {
+          senderId: senderId,
+        },
+        {
+          receiverId: senderId,
+        },
+      ],
+      // order: { id: 'DESC' },
+      take: take,
+      skip: skip,
+    });
+
+    return {
+      items: result,
+      totalItems: total,
+    };
   }
 
   findUserById(userId: number): Observable<UserEntity> {
