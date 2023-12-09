@@ -14,11 +14,11 @@ async function bootstrap() {
     options: {
       client: {
         brokers: [configService.get<string>('KAFKA_BROKER')],
-        ssl: {
-          ca: [configService.get<string>('SSL_CA')],
-          key: configService.get<string>('SSL_KEY'),
-          cert: configService.get<string>('SSL_CERT'),
-        },
+        // ssl: {
+        //   ca: [configService.get<string>('SSL_CA')],
+        //   key: configService.get<string>('SSL_KEY'),
+        //   cert: configService.get<string>('SSL_CERT'),
+        // },
       },
       consumer: {
         groupId: 'chat-messages',
@@ -26,16 +26,14 @@ async function bootstrap() {
     },
   });
 
-  const globalPrefix = 'chat-messages';
-  app.setGlobalPrefix(globalPrefix);
+  // const globalPrefix = 'messages';
+  // app.setGlobalPrefix(globalPrefix);
   const port = 3002;
 
   app.use(cors());
   await app.startAllMicroservices();
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  Logger.log(`🚀 Application is running on: http://localhost:${port}/`);
 }
 
 bootstrap();
