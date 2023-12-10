@@ -7,7 +7,7 @@ import {
 
 import { AuthMiddleware } from './auth.middleware';
 import { ConfigInjectionToken, AuthModuleConfig } from './config.interface';
-import { SupertokensService } from './supertokens/supertokens.service';
+import { SupertokensService } from './supertokens.service';
 
 @Module({
   providers: [SupertokensService],

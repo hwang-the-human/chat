@@ -19,6 +19,7 @@ export default function App() {
         <div className="App app-container">
           <div className="fill">
             <Routes>
+              {/* This shows the login UI on "/auth" route */}
               {getSuperTokensRoutesForReactRouterDom(
                 require('react-router-dom'),
                 PreBuiltUIList
@@ -27,6 +28,9 @@ export default function App() {
               <Route
                 path="/"
                 element={
+                  /* This protects the "/" route so that it shows
+                                    <Home /> only if the user is logged in.
+                                    Else it redirects the user to "/auth" */
                   <SessionAuth>
                     <Main />
                   </SessionAuth>

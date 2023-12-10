@@ -1,5 +1,10 @@
-import EmailPassword from 'supertokens-auth-react/recipe/emailpassword';
-import { EmailPasswordPreBuiltUI } from 'supertokens-auth-react/recipe/emailpassword/prebuiltui';
+import ThirdParty, {
+  Google,
+  Github,
+  Apple,
+  Twitter,
+} from 'supertokens-auth-react/recipe/thirdparty';
+import { ThirdPartyPreBuiltUI } from 'supertokens-auth-react/recipe/thirdparty/prebuiltui';
 import Session from 'supertokens-auth-react/recipe/session';
 
 export function getApiDomain() {
@@ -9,7 +14,7 @@ export function getApiDomain() {
 }
 
 export function getWebsiteDomain() {
-  const websitePort = process.env.REACT_APP_WEBSITE_PORT || 4200;
+  const websitePort = process.env.REACT_APP_WEBSITE_PORT || 3000;
   const websiteUrl =
     process.env.REACT_APP_WEBSITE_URL || `http://localhost:${websitePort}`;
   return websiteUrl;
@@ -23,14 +28,21 @@ export const SuperTokensConfig = {
   },
   // recipeList contains all the modules that you want to
   // use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
-  recipeList: [EmailPassword.init(), Session.init()],
+  recipeList: [
+    ThirdParty.init({
+      signInAndUpFeature: {
+        providers: [Github.init(), Google.init(), Apple.init(), Twitter.init()],
+      },
+    }),
+    Session.init(),
+  ],
 };
 
 export const recipeDetails = {
-  docsLink: 'https://supertokens.com/docs/emailpassword/introduction',
+  docsLink: 'https://supertokens.com/docs/thirdparty/introduction',
 };
 
-export const PreBuiltUIList = [EmailPasswordPreBuiltUI];
+export const PreBuiltUIList = [ThirdPartyPreBuiltUI];
 
 export const ComponentWrapper = (props: {
   children: JSX.Element;
