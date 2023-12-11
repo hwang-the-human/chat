@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
-import { ChatMessagesResolver } from './chat-messages.resolver';
-import { ChatMessagesService } from './chat-messages.service';
+import { ChatMessagesResolver } from './messages.resolver';
+import { ChatMessagesService } from './messages.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -28,11 +28,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: +configService.get<number>('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
+        url: configService.get<string>('DB_URL'),
         autoLoadEntities: true,
         synchronize: configService.get('NODE_ENV') === 'development',
       }),
@@ -55,9 +51,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                 cert: configService.get<string>('SSL_CERT'),
               },
             },
-            consumer: {
-              groupId: 'chats',
-            },
           },
         }),
         inject: [ConfigService],
@@ -78,9 +71,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                 key: configService.get<string>('SSL_KEY'),
                 cert: configService.get<string>('SSL_CERT'),
               },
-            },
-            consumer: {
-              groupId: 'users',
             },
           },
         }),

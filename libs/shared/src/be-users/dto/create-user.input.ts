@@ -1,8 +1,12 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsAlpha, IsPhoneNumber } from 'class-validator';
+import { IsAlpha } from 'class-validator';
 
 @InputType()
 export class CreateUserInput {
+  @IsAlpha()
+  @Field()
+  user_id: string;
+
   @IsAlpha()
   @Field()
   firstName: string;
@@ -11,10 +15,7 @@ export class CreateUserInput {
   @Field()
   lastName: string;
 
-  @IsPhoneNumber()
+  @IsAlpha()
   @Field()
-  phoneNumber: string;
-
-  @Field()
-  password: string;
+  imageUrl: string;
 }

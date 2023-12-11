@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 
-@Entity('chatMessages')
+@Entity('messages')
 @ObjectType()
 export class MessageEntity {
   @PrimaryGeneratedColumn()
@@ -25,12 +25,12 @@ export class MessageEntity {
   createdAt: Date;
 
   @Column()
-  @Field(() => Int)
-  senderId: number;
+  @Field()
+  senderId: string;
 
   @Column()
   @Field(() => Int)
-  receiverId: number;
+  receiverId: string;
 
   @ManyToMany(() => UserEntity, (user) => user.chatMessageSender)
   @JoinColumn()

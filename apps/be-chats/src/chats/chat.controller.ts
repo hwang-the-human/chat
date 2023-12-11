@@ -8,7 +8,7 @@ import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';
 export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
-  @EventPattern('create-chat')
+  @EventPattern('chats.create')
   async createChat(createChatInput: CreateChatInput) {
     return await this.chatsService.createChat(createChatInput);
   }

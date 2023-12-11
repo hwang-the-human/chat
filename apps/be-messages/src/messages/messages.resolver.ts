@@ -7,7 +7,7 @@ import {
   Parent,
   Int,
 } from '@nestjs/graphql';
-import { ChatMessagesService } from './chat-messages.service';
+import { ChatMessagesService } from './messages.service';
 import { CreateMessageInput } from '@app/shared/be-messages/dto/create-message.input';
 import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
@@ -34,8 +34,8 @@ export class ChatMessagesResolver {
 
   @Query(() => PaginationMessagesResponse)
   findUserChatMessages(
-    @Args('senderId', { type: () => Int })
-    senderId: number,
+    @Args('senderId')
+    senderId: string,
     // @Args('receiverId', { type: () => Int })
     // receiverId: number,
     @Args('options', {

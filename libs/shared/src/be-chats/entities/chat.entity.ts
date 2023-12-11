@@ -21,12 +21,12 @@ export class ChatEntity {
   createdAt: Date;
 
   @Column()
-  @Field(() => Int)
-  senderId: number;
+  @Field()
+  senderId: string;
 
   @Column()
-  @Field(() => Int)
-  receiverId: number;
+  @Field()
+  receiverId: string;
 
   @ManyToMany(() => UserEntity, (user) => user.chatSender)
   @JoinColumn()

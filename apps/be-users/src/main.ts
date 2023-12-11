@@ -14,11 +14,11 @@ async function bootstrap() {
     options: {
       client: {
         brokers: [configService.get<string>('KAFKA_BROKER')],
-        ssl: {
-          ca: [configService.get<string>('SSL_CA')],
-          key: configService.get<string>('SSL_KEY'),
-          cert: configService.get<string>('SSL_CERT'),
-        },
+        // ssl: {
+        //   ca: [configService.get<string>('SSL_CA')],
+        //   key: configService.get<string>('SSL_KEY'),
+        //   cert: configService.get<string>('SSL_CERT'),
+        // },
       },
       consumer: {
         groupId: 'users',

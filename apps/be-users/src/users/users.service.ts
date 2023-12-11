@@ -1,90 +1,46 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConfigService } from '@nestjs/config';
-import { CreateUserInput } from '@app/shared/be-users/dto/register-user.input';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
+import { CreateUserInput } from '@app/shared/be-users/dto/create-user.input';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
-import { LoginUserInput } from '@app/shared/be-users/dto/login-user.input';
-import { LoginResponse } from '@app/shared/be-users/dto/login-response';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>,
-    private configService: ConfigService,
-    private jwtService: JwtService
+    private usersRepository: Repository<UserEntity>
   ) {}
 
-  async registerUser(createUserInput: CreateUserInput): Promise<UserEntity> {
+  async createUser(createUserInput: CreateUserInput): Promise<UserEntity> {
     const user = await this.usersRepository.findOneBy({
-      phoneNumber: createUserInput.phoneNumber,
+      user_id: createUserInput.user_id,
     });
 
-    if (user) throw new BadRequestException('This phone number already exist!');
+    if (user) return;
 
     const newUser = this.usersRepository.create(createUserInput);
 
-    const hashed_password = await bcrypt.hash(
-      createUserInput.password,
-      +this.configService.get<number>('BCRYPT_SALT')
-    );
-
-    newUser.password = hashed_password;
-
     return await this.usersRepository.save(newUser);
-  }
-
-  async loginUser(loginUserInput: LoginUserInput): Promise<LoginResponse> {
-    const user = await this.usersRepository.findOneBy({
-      phoneNumber: loginUserInput.phoneNumber,
-    });
-
-    if (!user) throw new UnauthorizedException();
-
-    const isMatch = await bcrypt.compare(
-      loginUserInput.password,
-      user.password
-    );
-
-    if (!isMatch) throw new UnauthorizedException();
-
-    const access_token = await this.jwtService.signAsync({
-      username: user.phoneNumber,
-      sub: user.id,
-    });
-
-    return {
-      user: user,
-      access_token: access_token,
-    };
   }
 
   async findAllUsers(): Promise<UserEntity[]> {
     return await this.usersRepository.find();
   }
 
-  async findUserById(userId: number): Promise<UserEntity> {
-    const user = await this.usersRepository.findOneBy({ id: userId });
+  async findUserById(user_id: string): Promise<UserEntity> {
+    const user = await this.usersRepository.findOneBy({ user_id: user_id });
 
     if (!user) throw new NotFoundException('User not found');
 
     return user;
   }
 
-  async removeUserById(userId: number): Promise<any> {
-    const user = await this.usersRepository.findOneBy({ id: userId });
+  async removeUserById(user_id: string): Promise<any> {
+    const user = await this.usersRepository.findOneBy({ user_id: user_id });
 
     if (!user) throw new NotFoundException('User not found');
 
-    await this.usersRepository.delete({ id: userId });
+    await this.usersRepository.delete({ user_id: user_id });
 
     return user;
   }

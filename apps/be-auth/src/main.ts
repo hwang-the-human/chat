@@ -14,8 +14,8 @@ async function bootstrap() {
     credentials: true,
   });
   app.useGlobalFilters(new SupertokensExceptionFilter());
-  
-  const port = 4005;
+
+  const port = 4201;
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/`);
 }

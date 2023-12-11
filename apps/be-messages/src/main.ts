@@ -21,7 +21,7 @@ async function bootstrap() {
         // },
       },
       consumer: {
-        groupId: 'chat-messages',
+        groupId: 'messages',
       },
     },
   });

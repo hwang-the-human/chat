@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType, Directive, Int } from '@nestjs/graphql';
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   Column,
   CreateDateColumn,
   ManyToMany,
@@ -13,9 +13,9 @@ import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
 @ObjectType()
 @Directive('@shareable')
 export class UserEntity {
-  @PrimaryGeneratedColumn()
-  @Field((type) => Int)
-  id: number;
+  @PrimaryColumn()
+  @Field()
+  user_id: string;
 
   @Column()
   @Field()
@@ -27,11 +27,7 @@ export class UserEntity {
 
   @Column()
   @Field()
-  phoneNumber: string;
-
-  @Column()
-  @Field()
-  password: string;
+  imageUrl: string;
 
   @CreateDateColumn()
   @Field()

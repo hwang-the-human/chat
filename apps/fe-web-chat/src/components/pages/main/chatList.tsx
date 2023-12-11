@@ -33,9 +33,7 @@ export default function ChatList({ activeChat, setActiveChat }: Props) {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {loading ? (
-          <h1>Loading...</h1>
-        ) : (
+        {!loading && data ? (
           <List>
             {data?.findUserChats?.items?.map((chat, i) => (
               <ChatItem
@@ -46,6 +44,8 @@ export default function ChatList({ activeChat, setActiveChat }: Props) {
               />
             ))}
           </List>
+        ) : (
+          <h1>Loading...</h1>
         )}
       </div>
     </div>

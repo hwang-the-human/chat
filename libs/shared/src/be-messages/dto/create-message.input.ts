@@ -4,12 +4,12 @@ import { IsNumber } from 'class-validator';
 @InputType()
 export class CreateMessageInput {
   @IsNumber()
-  @Field(() => Int)
-  senderId: number;
+  @Field()
+  senderId: string;
 
   @IsNumber()
-  @Field(() => Int)
-  receiverId: number;
+  @Field()
+  receiverId: string;
 
   @Field()
   content: string;

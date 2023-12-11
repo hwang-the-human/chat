@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ChatMessagesModule } from '../chat-messages/chat-messages.module';
+import { ChatMessagesModule } from '../messages/messages.module';
 import { EventsModule } from '../events/events.module';
 
 @Module({

@@ -3,10 +3,8 @@ import {
   Query,
   Mutation,
   Args,
-  Int,
   ResolveField,
   Parent,
-  ResolveReference,
 } from '@nestjs/graphql';
 import { ChatsService } from './chats.service';
 import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';
@@ -27,8 +25,8 @@ export class ChatsResolver {
 
   @Query(() => PaginationChatsResponse)
   findUserChats(
-    @Args('senderId', { type: () => Int })
-    senderId: number,
+    @Args('senderId')
+    senderId: string,
     @Args('options', { type: () => PaginationChatOptionsInput, nullable: true })
     options?: PaginationChatOptionsInput
   ): Promise<PaginationChatsResponse> {

@@ -4,10 +4,10 @@ import { IsNumber } from 'class-validator';
 @InputType()
 export class CreateChatInput {
   @IsNumber()
-  @Field(() => Int)
-  senderId: number;
+  @Field()
+  senderId: string;
 
   @IsNumber()
-  @Field(() => Int)
-  receiverId: number;
+  @Field()
+  receiverId: string;
 }

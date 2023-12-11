@@ -1,3 +1,4 @@
+import { CreateMessageInput } from '@app/shared/be-messages/dto/create-message.input';
 import { Inject } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import {
@@ -12,13 +13,13 @@ import { Server } from 'socket.io';
 export class EventsGateway {
   @WebSocketServer()
   server: Server;
+
   constructor(
     @Inject('MESSAGES_SERVICE') private readonly messagesClient: ClientKafka
   ) {}
 
-  @SubscribeMessage('newMessage')
-  onNewMessage(@MessageBody() body: any) {
-    console.log('Send to kafka');
-    this.messagesClient.emit('messages.id', { message: 'hello bro' });
+  @SubscribeMessage('messages.send')
+  onNewMessage(@MessageBody() newMessage: CreateMessageInput) {
+    this.messagesClient.emit(`messages`, newMessage);
   }
 }

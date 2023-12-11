@@ -1,16 +1,7 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  Int,
-  ResolveReference,
-} from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { UsersService } from './users.service';
-import { LoginUserInput } from '@app/shared/be-users/dto/login-user.input';
-import { LoginResponse } from '@app/shared/be-users/dto/login-response';
-import { CreateUserInput } from '@app/shared/be-users/dto/register-user.input';
+import { CreateUserInput } from '@app/shared/be-users/dto/create-user.input';
 
 @Resolver(() => UserEntity)
 export class UsersResolver {
@@ -22,28 +13,23 @@ export class UsersResolver {
   }
 
   @Mutation(() => UserEntity)
-  registerUser(
+  createUser(
     @Args('createUserInput') createUserInput: CreateUserInput
   ): Promise<UserEntity> {
-    return this.usersService.registerUser(createUserInput);
-  }
-
-  @Mutation(() => LoginResponse)
-  loginUser(@Args('loginUserInput') loginUserInput: LoginUserInput) {
-    return this.usersService.loginUser(loginUserInput);
+    return this.usersService.createUser(createUserInput);
   }
 
   @Query(() => UserEntity)
   removeUserById(
-    @Args('userId', { type: () => Int }) userId: number
+    @Args('user_id', { type: () => Int }) user_id: string
   ): Promise<UserEntity> {
-    return this.usersService.removeUserById(userId);
+    return this.usersService.removeUserById(user_id);
   }
 
   @Query(() => UserEntity)
   findUserById(
-    @Args('userId', { type: () => Int }) userId: number
+    @Args('user_id', { type: () => Int }) user_id: string
   ): Promise<UserEntity> {
-    return this.usersService.findUserById(userId);
+    return this.usersService.findUserById(user_id);
   }
 }

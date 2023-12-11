@@ -17,8 +17,6 @@ export default function Chat({ activeChat }: Props) {
 
   const [input, setInput] = useState<string>('');
 
-  console.log(activeChat);
-
   const messages = useMemo(() => {
     if (loading) return [];
     return data?.findUserChatMessages?.items?.filter(

@@ -6,7 +6,6 @@ import { Routes, Route } from 'react-router-dom';
 import {
   PreBuiltUIList,
   SuperTokensConfig,
-  ComponentWrapper,
 } from '../configs/superTokens.config';
 import Main from '../components/pages/main/main';
 
@@ -15,31 +14,29 @@ SuperTokens.init(SuperTokensConfig);
 export default function App() {
   return (
     <SuperTokensWrapper>
-      <ComponentWrapper>
-        <div className="App app-container">
-          <div className="fill">
-            <Routes>
-              {/* This shows the login UI on "/auth" route */}
-              {getSuperTokensRoutesForReactRouterDom(
-                require('react-router-dom'),
-                PreBuiltUIList
-              )}
+      <div className="App app-container">
+        <div className="fill">
+          <Routes>
+            {/* This shows the login UI on "/auth" route */}
+            {getSuperTokensRoutesForReactRouterDom(
+              require('react-router-dom'),
+              PreBuiltUIList
+            )}
 
-              <Route
-                path="/"
-                element={
-                  /* This protects the "/" route so that it shows
+            <Route
+              path="/"
+              element={
+                /* This protects the "/" route so that it shows
                                     <Home /> only if the user is logged in.
                                     Else it redirects the user to "/auth" */
-                  <SessionAuth>
-                    <Main />
-                  </SessionAuth>
-                }
-              />
-            </Routes>
-          </div>
+                <SessionAuth>
+                  <Main />
+                </SessionAuth>
+              }
+            />
+          </Routes>
         </div>
-      </ComponentWrapper>
+      </div>
     </SuperTokensWrapper>
   );
 }

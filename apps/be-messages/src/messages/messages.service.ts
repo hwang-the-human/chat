@@ -21,7 +21,7 @@ export class ChatMessagesService implements OnModuleInit {
   ) {}
 
   onModuleInit() {
-    this.usersClient.subscribeToResponseOf('get-user');
+    this.usersClient.subscribeToResponseOf('users.get');
   }
 
   async findAllChatMessages(): Promise<MessageEntity[]> {
@@ -31,7 +31,7 @@ export class ChatMessagesService implements OnModuleInit {
   async createChatMessage(
     CreateMessageInput: CreateMessageInput
   ): Promise<MessageEntity> {
-    this.chatsClient.emit('create-chat', {
+    this.chatsClient.emit('chats.create', {
       senderId: CreateMessageInput.senderId,
       receiverId: CreateMessageInput.receiverId,
     } satisfies CreateChatInput);
@@ -41,7 +41,7 @@ export class ChatMessagesService implements OnModuleInit {
   }
 
   async findUserChatMessages(
-    senderId: number,
+    senderId: string,
     // receiverId: number,
     options?: PaginationMessageOptionsInput
   ): Promise<PaginationMessagesResponse> {
@@ -68,7 +68,7 @@ export class ChatMessagesService implements OnModuleInit {
     };
   }
 
-  findUserById(userId: number): Observable<UserEntity> {
-    return this.usersClient.send('get-user', userId).pipe(timeout(5000));
+  findUserById(user_id: string): Observable<UserEntity> {
+    return this.usersClient.send('users.get', user_id).pipe(timeout(5000));
   }
 }

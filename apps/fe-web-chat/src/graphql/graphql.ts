@@ -86,7 +86,7 @@ export type Mutation = {
   createChat: ChatEntity;
   createChatMessage: MessageEntity;
   loginUser: LoginResponse;
-  registerUser: UserEntity;
+  createUser: UserEntity;
 };
 
 export type MutationCreateChatArgs = {
@@ -101,7 +101,7 @@ export type MutationLoginUserArgs = {
   loginUserInput: LoginUserInput;
 };
 
-export type MutationRegisterUserArgs = {
+export type MutationcreateUserArgs = {
   createUserInput: CreateUserInput;
 };
 
@@ -139,7 +139,7 @@ export type Query = {
 };
 
 export type QueryFindUserByIdArgs = {
-  userId: Scalars['Int']['input'];
+  user_id: Scalars['Int']['input'];
 };
 
 export type QueryFindUserChatMessagesArgs = {
@@ -153,7 +153,7 @@ export type QueryFindUserChatsArgs = {
 };
 
 export type QueryRemoveUserByIdArgs = {
-  userId: Scalars['Int']['input'];
+  user_id: Scalars['Int']['input'];
 };
 
 export type UserEntity = {

@@ -1,14 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
 import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';
 import { Inject, OnModuleInit } from '@nestjs/common';
-import { ClientKafka, EventPattern } from '@nestjs/microservices';
+import { ClientKafka } from '@nestjs/microservices';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { Observable, timeout } from 'rxjs';
 import { PaginationChatOptionsInput } from '@app/shared/be-chats/dto/paginate-chats.input';
@@ -23,7 +19,7 @@ export class ChatsService implements OnModuleInit {
   ) {}
 
   onModuleInit() {
-    this.usersClient.subscribeToResponseOf('get-user');
+    this.usersClient.subscribeToResponseOf('users.get');
   }
 
   async findAllChats(): Promise<ChatEntity[]> {
@@ -39,7 +35,7 @@ export class ChatsService implements OnModuleInit {
   }
 
   async findUserChats(
-    senderId: number,
+    senderId: string,
     options?: PaginationChatOptionsInput
   ): Promise<PaginationChatsResponse> {
     const take = options?.limit || 10;
@@ -72,7 +68,7 @@ export class ChatsService implements OnModuleInit {
     return await this.chatsRepository.save(newChat);
   }
 
-  findUserById(userId: number): Observable<UserEntity> {
-    return this.usersClient.send('get-user', userId).pipe(timeout(5000));
+  findUserById(user_id: string): Observable<UserEntity> {
+    return this.usersClient.send('users.get', user_id).pipe(timeout(5000));
   }
 }
