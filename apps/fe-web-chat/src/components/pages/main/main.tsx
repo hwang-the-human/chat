@@ -56,8 +56,9 @@ export default function Main({}: Props) {
 
   return (
     <div className="flex h-screen">
-      <ChatList activeChat={activeChat} setActiveChat={setActiveChat} />
-      <Chat activeChat={activeChat} />
+      <div onClick={logoutClicked}>SIGN OUT</div>
+      {/* <ChatList activeChat={activeChat} setActiveChat={setActiveChat} />
+      <Chat activeChat={activeChat} /> */}
     </div>
   );
 }

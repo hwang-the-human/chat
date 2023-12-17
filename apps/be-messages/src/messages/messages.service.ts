@@ -12,7 +12,7 @@ import { PaginationMessagesResponse } from '@app/shared/be-messages/dto/paginate
 import { PaginationMessageOptionsInput } from '@app/shared/be-messages/dto/paginate-messages.input';
 
 @Injectable()
-export class ChatMessagesService implements OnModuleInit {
+export class MessagesService implements OnModuleInit {
   constructor(
     @InjectRepository(MessageEntity)
     private chatMessagesRepository: Repository<MessageEntity>,
