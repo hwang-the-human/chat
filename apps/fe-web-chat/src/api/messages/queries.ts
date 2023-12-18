@@ -1,25 +1,27 @@
 import { graphql } from '../../graphql/gql';
 
-export const findUserChatMessages = graphql(`
-  query findUserChatMessages(
-    $senderId: Int!
+export const findMyMessages = graphql(`
+  query findMyMessages(
+    $senderId: String!
     $options: PaginationMessageOptionsInput
   ) {
-    findUserChatMessages(senderId: $senderId, options: $options) {
+    findMyMessages(senderId: $senderId, options: $options) {
       totalItems
       items {
         id
         content
         createdAt
         sender {
-          id
+          user_id
           firstName
           lastName
+          imageUrl
         }
         receiver {
-          id
+          user_id
           firstName
           lastName
+          imageUrl
         }
       }
     }

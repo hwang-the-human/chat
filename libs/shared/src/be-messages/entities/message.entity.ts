@@ -29,7 +29,7 @@ export class MessageEntity {
   senderId: string;
 
   @Column()
-  @Field(() => Int)
+  @Field()
   receiverId: string;
 
   @ManyToMany(() => UserEntity, (user) => user.chatMessageSender)

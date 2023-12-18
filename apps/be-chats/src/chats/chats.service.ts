@@ -34,7 +34,7 @@ export class ChatsService implements OnModuleInit {
     return chat;
   }
 
-  async findUserChats(
+  async findMyChats(
     senderId: string,
     options?: PaginationChatOptionsInput
   ): Promise<PaginationChatsResponse> {

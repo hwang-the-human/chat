@@ -1,20 +1,22 @@
 import { graphql } from '../../graphql/gql';
 
-export const findUsersChats = graphql(`
-  query findUsersChats($senderId: Int!, $options: PaginationChatOptionsInput) {
-    findUserChats(senderId: $senderId, options: $options) {
+export const findMyChats = graphql(`
+  query findMyChats($senderId: String!, $options: PaginationChatOptionsInput) {
+    findMyChats(senderId: $senderId, options: $options) {
       totalItems
       items {
         id
         sender {
-          id
+          user_id
           firstName
           lastName
+          imageUrl
         }
         receiver {
-          id
+          user_id
           firstName
           lastName
+          imageUrl
         }
       }
     }

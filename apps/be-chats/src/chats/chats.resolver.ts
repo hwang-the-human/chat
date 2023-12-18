@@ -18,19 +18,14 @@ import { PaginationChatsResponse } from '@app/shared/be-chats/dto/paginate-chats
 export class ChatsResolver {
   constructor(private chatsService: ChatsService) {}
 
-  @Query(() => [ChatEntity])
-  findAllChats(): Promise<ChatEntity[]> {
-    return this.chatsService.findAllChats();
-  }
-
   @Query(() => PaginationChatsResponse)
-  findUserChats(
+  findMyChats(
     @Args('senderId')
     senderId: string,
     @Args('options', { type: () => PaginationChatOptionsInput, nullable: true })
     options?: PaginationChatOptionsInput
   ): Promise<PaginationChatsResponse> {
-    return this.chatsService.findUserChats(senderId, options);
+    return this.chatsService.findMyChats(senderId, options);
   }
 
   @Mutation(() => ChatEntity)

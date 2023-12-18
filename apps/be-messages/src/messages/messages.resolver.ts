@@ -10,13 +10,8 @@ import { PaginationMessageOptionsInput } from '@app/shared/be-messages/dto/pagin
 export class MessagesResolver {
   constructor(private chatMessagesService: MessagesService) {}
 
-  @Query(() => [MessageEntity])
-  findAllChatMessages(): Promise<MessageEntity[]> {
-    return this.chatMessagesService.findAllChatMessages();
-  }
-
   @Query(() => PaginationMessagesResponse)
-  findUserChatMessages(
+  findMyMessages(
     @Args('senderId')
     senderId: string,
     // @Args('receiverId', { type: () => Int })
@@ -27,7 +22,7 @@ export class MessagesResolver {
     })
     options?: PaginationMessageOptionsInput
   ): Promise<PaginationMessagesResponse> {
-    return this.chatMessagesService.findUserChatMessages(
+    return this.chatMessagesService.findMyMessages(
       senderId,
       // receiverId,
       options

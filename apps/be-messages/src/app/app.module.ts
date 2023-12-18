@@ -15,6 +15,8 @@ import {
 } from '@nestjs/apollo';
 import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MessagesResolver } from '../messages/messages.resolver';
+import { MessagesService } from '../messages/messages.service';
 
 @Module({
   imports: [
@@ -101,6 +103,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ]),
   ],
   controllers: [AppController],
-  providers: [AppService, MessagesModule, EventsModule],
+  providers: [
+    AppService,
+    MessagesModule,
+    MessagesResolver,
+    MessagesService,
+    EventsModule,
+  ],
 })
 export class AppModule {}

@@ -2,44 +2,37 @@ import React, { useMemo } from 'react';
 import { Avatar, IconButton, Typography } from '@material-tailwind/react';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useQuery } from '@apollo/client';
-import { findUserChatMessages } from 'apps/fe-web-chat/src/api/chat-messages/queries';
+import { findMyMessages } from 'apps/fe-web-chat/src/api/messages/queries';
+import { findUserById } from 'apps/fe-web-chat/src/api/users/queries';
 
 interface Props {
-  activeChat: number;
+  activeChat: string;
+  userId: string;
 }
 
-export default function ChatHeader({ activeChat }: Props) {
-  const { loading, error, data } = useQuery(findUserChatMessages, {
-    variables: { senderId: 1 },
+export default function ChatHeader({ userId, activeChat }: Props) {
+  const { loading, error, data } = useQuery(findUserById, {
+    variables: { user_id: activeChat },
   });
-
-  const chat = useMemo(() => {
-    if (loading) return;
-    return data?.findUserChatMessages?.items?.find(
-      (a) => a.sender.id === activeChat || a.receiver.id === activeChat
-    );
-  }, [data?.findUserChatMessages?.items, activeChat]);
 
   function handleProfile() {}
 
   return (
     <div className="flex items-center justify-between bg-secondary h-[70px] pl-5 pr-5">
-      <div className="flex items-center gap-3">
-        {/* <Avatar
-          className="cursor-pointer"
-          src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
-          alt="profile"
-          onClick={handleProfile}
-        /> */}
+      <div className="flex items-center gap-2">
+        {activeChat && (
+          <Avatar
+            src={data?.findUserById.imageUrl}
+            onClick={handleProfile}
+            className="cursor-pointer rounded-full"
+            alt="avatar"
+            width="50px"
+            height="50px"
+          />
+        )}
         <Typography variant="h6" color="white">
-          Tania Andrew
+          {data?.findUserById.firstName} {data?.findUserById.lastName}
         </Typography>
-      </div>
-
-      <div className="flex gap-6">
-        {/* <IconButton className="rounded-full">
-          <PlusCircleIcon className="h-6 w-6" color="lightGray" />
-        </IconButton> */}
       </div>
     </div>
   );

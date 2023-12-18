@@ -1,25 +1,29 @@
 import { Typography } from '@material-tailwind/react';
 import React from 'react';
-import { FindUserChatMessagesQuery } from '../../graphql/graphql';
+import { FindMyMessagesQuery } from '../../graphql/graphql';
 import { useQuery } from '@apollo/client';
-import { findUserChatMessages } from '../../api/chat-messages/queries';
+import { findMyMessages } from '../../api/messages/queries';
 import dayjs from 'dayjs';
 
 interface Props {
-  message: FindUserChatMessagesQuery['findUserChatMessages']['items'][number];
-  activeChat: number;
+  message: FindMyMessagesQuery['findMyMessages']['items'][number];
+  activeChat: string;
 }
 
 export default function MessageItem({ message, activeChat }: Props) {
   return (
     <div
       className={`flex max-w-full ${
-        message.receiver.id === activeChat ? 'justify-end' : 'justify-start'
+        message.receiver.user_id === activeChat
+          ? 'justify-end'
+          : 'justify-start'
       }`}
     >
       <div
         className={`flex gap-1 ${
-          message.receiver.id === activeChat ? 'bg-green-700' : 'bg-gray-700'
+          message.receiver.user_id === activeChat
+            ? 'bg-green-700'
+            : 'bg-gray-700'
         } pl-2 pr-2 pb-1 pt-1 box-border rounded-md`}
       >
         <Typography variant="h6" color="white">

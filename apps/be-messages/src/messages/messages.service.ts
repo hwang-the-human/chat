@@ -15,17 +15,13 @@ import { PaginationMessageOptionsInput } from '@app/shared/be-messages/dto/pagin
 export class MessagesService implements OnModuleInit {
   constructor(
     @InjectRepository(MessageEntity)
-    private chatMessagesRepository: Repository<MessageEntity>,
+    private messagesRepository: Repository<MessageEntity>,
     @Inject('USERS_SERVICE') private readonly usersClient: ClientKafka,
     @Inject('CHATS_SERVICE') private readonly chatsClient: ClientKafka
   ) {}
 
   onModuleInit() {
     this.usersClient.subscribeToResponseOf('users.get');
-  }
-
-  async findAllChatMessages(): Promise<MessageEntity[]> {
-    return await this.chatMessagesRepository.find();
   }
 
   async createChatMessage(
@@ -36,11 +32,11 @@ export class MessagesService implements OnModuleInit {
       receiverId: CreateMessageInput.receiverId,
     } satisfies CreateChatInput);
 
-    const newChat = this.chatMessagesRepository.create(CreateMessageInput);
-    return await this.chatMessagesRepository.save(newChat);
+    const newChat = this.messagesRepository.create(CreateMessageInput);
+    return await this.messagesRepository.save(newChat);
   }
 
-  async findUserChatMessages(
+  async findMyMessages(
     senderId: string,
     // receiverId: number,
     options?: PaginationMessageOptionsInput
@@ -48,7 +44,7 @@ export class MessagesService implements OnModuleInit {
     const take = options?.limit || 10;
     const skip = options?.page || 0;
 
-    const [result, total] = await this.chatMessagesRepository.findAndCount({
+    const [result, total] = await this.messagesRepository.findAndCount({
       where: [
         {
           senderId: senderId,

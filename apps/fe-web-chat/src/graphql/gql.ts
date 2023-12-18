@@ -13,12 +13,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  query findUserChatMessages(\n    $senderId: Int!\n    $options: PaginationMessageOptionsInput\n  ) {\n    findUserChatMessages(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        content\n        createdAt\n        sender {\n          id\n          firstName\n          lastName\n        }\n        receiver {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n':
-    types.FindUserChatMessagesDocument,
-  '\n  query findUsersChats($senderId: Int!, $options: PaginationChatOptionsInput) {\n    findUserChats(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        sender {\n          id\n          firstName\n          lastName\n        }\n        receiver {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n':
-    types.FindUsersChatsDocument,
-  '\n  query findAllUsers {\n    findAllUsers {\n      id\n      firstName\n    }\n  }\n':
-    types.FindAllUsersDocument,
+    "\n  query findMyChats($senderId: String!, $options: PaginationChatOptionsInput) {\n    findMyChats(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        sender {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n        receiver {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n      }\n    }\n  }\n": types.FindMyChatsDocument,
+    "\n  query findMyMessages(\n    $senderId: String!\n    $options: PaginationMessageOptionsInput\n  ) {\n    findMyMessages(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        content\n        createdAt\n        sender {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n        receiver {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n      }\n    }\n  }\n": types.FindMyMessagesDocument,
+    "\n  query findUserById($user_id: String!) {\n    findUserById(user_id: $user_id) {\n      user_id\n      firstName\n      lastName\n      imageUrl\n    }\n  }\n": types.FindUserByIdDocument,
+    "\n  query findUsers($options: PaginationUsersOptionsInput) {\n    findUsers(options: $options) {\n      totalItems\n      items {\n        user_id\n        firstName\n        lastName\n        imageUrl\n      }\n    }\n  }\n": types.FindUsersDocument,
 };
 
 /**
@@ -38,25 +36,22 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-  source: '\n  query findUserChatMessages(\n    $senderId: Int!\n    $options: PaginationMessageOptionsInput\n  ) {\n    findUserChatMessages(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        content\n        createdAt\n        sender {\n          id\n          firstName\n          lastName\n        }\n        receiver {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query findUserChatMessages(\n    $senderId: Int!\n    $options: PaginationMessageOptionsInput\n  ) {\n    findUserChatMessages(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        content\n        createdAt\n        sender {\n          id\n          firstName\n          lastName\n        }\n        receiver {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n'];
+export function graphql(source: "\n  query findMyChats($senderId: String!, $options: PaginationChatOptionsInput) {\n    findMyChats(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        sender {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n        receiver {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query findMyChats($senderId: String!, $options: PaginationChatOptionsInput) {\n    findMyChats(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        sender {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n        receiver {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-  source: '\n  query findUsersChats($senderId: Int!, $options: PaginationChatOptionsInput) {\n    findUserChats(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        sender {\n          id\n          firstName\n          lastName\n        }\n        receiver {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query findUsersChats($senderId: Int!, $options: PaginationChatOptionsInput) {\n    findUserChats(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        sender {\n          id\n          firstName\n          lastName\n        }\n        receiver {\n          id\n          firstName\n          lastName\n        }\n      }\n    }\n  }\n'];
+export function graphql(source: "\n  query findMyMessages(\n    $senderId: String!\n    $options: PaginationMessageOptionsInput\n  ) {\n    findMyMessages(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        content\n        createdAt\n        sender {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n        receiver {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query findMyMessages(\n    $senderId: String!\n    $options: PaginationMessageOptionsInput\n  ) {\n    findMyMessages(senderId: $senderId, options: $options) {\n      totalItems\n      items {\n        id\n        content\n        createdAt\n        sender {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n        receiver {\n          user_id\n          firstName\n          lastName\n          imageUrl\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-  source: '\n  query findAllUsers {\n    findAllUsers {\n      id\n      firstName\n    }\n  }\n'
-): (typeof documents)['\n  query findAllUsers {\n    findAllUsers {\n      id\n      firstName\n    }\n  }\n'];
+export function graphql(source: "\n  query findUserById($user_id: String!) {\n    findUserById(user_id: $user_id) {\n      user_id\n      firstName\n      lastName\n      imageUrl\n    }\n  }\n"): (typeof documents)["\n  query findUserById($user_id: String!) {\n    findUserById(user_id: $user_id) {\n      user_id\n      firstName\n      lastName\n      imageUrl\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query findUsers($options: PaginationUsersOptionsInput) {\n    findUsers(options: $options) {\n      totalItems\n      items {\n        user_id\n        firstName\n        lastName\n        imageUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  query findUsers($options: PaginationUsersOptionsInput) {\n    findUsers(options: $options) {\n      totalItems\n      items {\n        user_id\n        firstName\n        lastName\n        imageUrl\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
 }
 
-export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
-  TDocumentNode extends DocumentNode<infer TType, any> ? TType : never;
+export type DocumentType<TDocumentNode extends DocumentNode<any, any>> = TDocumentNode extends DocumentNode<  infer TType,  any>  ? TType  : never;
