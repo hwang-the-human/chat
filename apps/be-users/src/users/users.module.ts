@@ -4,7 +4,6 @@ import { UsersResolver } from './users.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { ChatEntity } from '@app/shared/be-chats/entities/chat.entity';
-import { JwtModule } from '@nestjs/jwt';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { UsersController } from './users.controller';
 import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
@@ -25,15 +24,6 @@ import { GraphQLModule } from '@nestjs/graphql';
       },
       plugins: [ApolloServerPluginInlineTrace()],
     }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        global: true,
-        secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1d' },
-      }),
-      inject: [ConfigService],
-    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -48,5 +38,6 @@ import { GraphQLModule } from '@nestjs/graphql';
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersResolver],
+  exports: [UsersService],
 })
 export class UsersModule {}

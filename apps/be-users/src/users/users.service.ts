@@ -10,7 +10,7 @@ import { PaginationUsersOptionsInput } from '@app/shared/be-users/dto/paginate-u
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>
+    private readonly usersRepository: Repository<UserEntity>
   ) {}
 
   async findUsers(

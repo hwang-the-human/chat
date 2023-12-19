@@ -1,23 +1,14 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/app.module';
-import supertokens from 'supertokens-node';
-import { SupertokensExceptionFilter } from './auth/auth.filter';
-import * as SuperTokensConfig from './configs/superTokens.config';
 import { Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+
+import { AppModule } from './app/app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+import cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
-
-  app.enableCors({
-    origin: [SuperTokensConfig.appInfo.websiteDomain],
-    allowedHeaders: ['content-type', ...supertokens.getAllCORSHeaders()],
-    credentials: true,
-  });
-  app.useGlobalFilters(new SupertokensExceptionFilter());
-
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
@@ -30,12 +21,16 @@ async function bootstrap() {
         // },
       },
       consumer: {
-        groupId: 'be-users',
+        groupId: 'be-core',
       },
     },
   });
 
-  const port = 4201;
+  // const globalPrefix = 'messages';
+  // app.setGlobalPrefix(globalPrefix);
+  const port = 3002;
+
+  app.use(cors());
   await app.startAllMicroservices();
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/`);
