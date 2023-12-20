@@ -13,35 +13,26 @@ import { findMyMessages } from '../../api/messages/queries';
 import dayjs from 'dayjs';
 
 interface Props {
-  userId: string;
   chat: FindMyChatsQuery['findMyChats']['items'][number];
   activeChat: string;
   setActiveChat: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function ChatItem({
-  chat,
-  activeChat,
-  setActiveChat,
-  userId,
-}: Props) {
+export default function ChatItem({ chat, activeChat, setActiveChat }: Props) {
   const { loading, error, data } = useQuery(findMyMessages, {
-    variables: { senderId: userId },
+    variables: {
+      senderId: chat.sender.user_id,
+      receiverId: chat.receiver.user_id,
+    },
   });
 
   const message = useMemo(() => {
     if (loading) return;
-    return data?.findMyMessages?.items
-      ?.filter(
-        (a) =>
-          a.sender.user_id === chat.sender.user_id &&
-          a.receiver.user_id === chat.receiver.user_id
-      )
-      ?.at(-1);
-  }, [data?.findMyMessages?.items]);
+    return data?.findMyMessages.items.at(-1);
+  }, [data]);
 
   function handleSelectChat() {
-    setActiveChat(message?.receiver?.user_id || '');
+    setActiveChat(chat.receiver.user_id);
   }
 
   return (
@@ -51,7 +42,7 @@ export default function ChatItem({
       }`}
       onClick={handleSelectChat}
     >
-      <div className="flex">
+      <div className="flex gap-2">
         <ListItemPrefix>
           <Avatar
             src={chat.receiver.imageUrl}

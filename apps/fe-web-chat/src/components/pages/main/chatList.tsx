@@ -41,7 +41,6 @@ export default function ChatList({ activeChat, setActiveChat, userId }: Props) {
                 chat={chat}
                 activeChat={activeChat}
                 setActiveChat={setActiveChat}
-                userId={userId}
                 key={i}
               />
             ))}

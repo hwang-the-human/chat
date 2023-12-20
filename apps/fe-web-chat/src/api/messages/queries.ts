@@ -3,9 +3,14 @@ import { graphql } from '../../graphql/gql';
 export const findMyMessages = graphql(`
   query findMyMessages(
     $senderId: String!
+    $receiverId: String!
     $options: PaginationMessageOptionsInput
   ) {
-    findMyMessages(senderId: $senderId, options: $options) {
+    findMyMessages(
+      senderId: $senderId
+      receiverId: $receiverId
+      options: $options
+    ) {
       totalItems
       items {
         id

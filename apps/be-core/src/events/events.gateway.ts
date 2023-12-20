@@ -17,7 +17,7 @@ export class EventsGateway {
 
   @SubscribeMessage('messages.send')
   onNewMessage(@MessageBody() newMessage: CreateMessageInput) {
-    this.chatMessagesService.createChatMessage(newMessage);
+    this.chatMessagesService.createMessage(newMessage);
     this.server.emit(`messages.${newMessage.receiverId}`, newMessage);
   }
 }

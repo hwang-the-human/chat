@@ -25,30 +25,31 @@ export class MessagesService implements OnModuleInit {
     this.usersClient.subscribeToResponseOf('users.get');
   }
 
-  async createChatMessage(
-    CreateMessageInput: CreateMessageInput
+  async createMessage(
+    createMessageInput: CreateMessageInput
   ): Promise<MessageEntity> {
-    this.chatsService.createChat({
-      senderId: CreateMessageInput.senderId,
-      receiverId: CreateMessageInput.receiverId,
+    await this.chatsService.createChat({
+      senderId: createMessageInput.senderId,
+      receiverId: createMessageInput.receiverId,
     } satisfies CreateChatInput);
 
-    const newChat = this.messagesRepository.create(CreateMessageInput);
-    return await this.messagesRepository.save(newChat);
+    const newMessage = this.messagesRepository.create(createMessageInput);
+    return await this.messagesRepository.save(newMessage);
   }
 
   async findMyMessages(
     senderId: string,
-    // receiverId: number,
+    receiverId: string,
     options?: PaginationMessageOptionsInput
   ): Promise<PaginationMessagesResponse> {
-    const take = options?.limit || 10;
+    const take = options?.limit || 30;
     const skip = options?.page || 0;
 
     const [result, total] = await this.messagesRepository.findAndCount({
       where: [
         {
           senderId: senderId,
+          receiverId: receiverId,
         },
         {
           receiverId: senderId,

@@ -1,9 +1,8 @@
 import { Typography } from '@material-tailwind/react';
-import React from 'react';
 import { FindMyMessagesQuery } from '../../graphql/graphql';
-import { useQuery } from '@apollo/client';
-import { findMyMessages } from '../../api/messages/queries';
 import dayjs from 'dayjs';
+import { ClockIcon } from '@heroicons/react/24/outline';
+import { CheckIcon } from '@heroicons/react/24/outline';
 
 interface Props {
   message: FindMyMessagesQuery['findMyMessages']['items'][number];
@@ -29,13 +28,11 @@ export default function MessageItem({ message, activeChat }: Props) {
         <Typography variant="h6" color="white">
           {message.content}
         </Typography>
-        <Typography
-          color="white"
-          variant="small"
-          className="font-normal text-gray-200 mt-4 text-xs"
-        >
-          {dayjs(message.createdAt).format('HH:mm')}
-        </Typography>
+        {message.createdAt ? (
+          <CheckIcon className="h-4 w-4 text-gray-200 mt-4" />
+        ) : (
+          <ClockIcon className="h-4 w-4 text-gray-200 mt-4" />
+        )}
       </div>
     </div>
   );

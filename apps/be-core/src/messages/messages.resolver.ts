@@ -1,10 +1,18 @@
-import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Args,
+  ResolveField,
+  Parent,
+  Mutation,
+} from '@nestjs/graphql';
 import { MessagesService } from './messages.service';
 import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
 import { Observable } from 'rxjs';
 import { PaginationMessagesResponse } from '@app/shared/be-messages/dto/paginate-messages-response';
 import { PaginationMessageOptionsInput } from '@app/shared/be-messages/dto/paginate-messages.input';
+import { CreateMessageInput } from '@app/shared/be-messages/dto/create-message.input';
 
 @Resolver(() => MessageEntity)
 export class MessagesResolver {
@@ -14,8 +22,8 @@ export class MessagesResolver {
   findMyMessages(
     @Args('senderId')
     senderId: string,
-    // @Args('receiverId', { type: () => Int })
-    // receiverId: number,
+    @Args('receiverId')
+    receiverId: string,
     @Args('options', {
       type: () => PaginationMessageOptionsInput,
       nullable: true,
@@ -24,9 +32,16 @@ export class MessagesResolver {
   ): Promise<PaginationMessagesResponse> {
     return this.chatMessagesService.findMyMessages(
       senderId,
-      // receiverId,
+      receiverId,
       options
     );
+  }
+
+  @Mutation(() => MessageEntity)
+  createMessage(
+    @Args('createMessageInput') createMessageInput: CreateMessageInput
+  ): Promise<MessageEntity> {
+    return this.chatMessagesService.createMessage(createMessageInput);
   }
 
   @ResolveField(() => UserEntity)

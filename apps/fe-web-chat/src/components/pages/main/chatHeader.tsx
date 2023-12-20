@@ -7,10 +7,9 @@ import { findUserById } from 'apps/fe-web-chat/src/api/users/queries';
 
 interface Props {
   activeChat: string;
-  userId: string;
 }
 
-export default function ChatHeader({ userId, activeChat }: Props) {
+export default function ChatHeader({ activeChat }: Props) {
   const { loading, error, data } = useQuery(findUserById, {
     variables: { user_id: activeChat },
   });
