@@ -6,13 +6,14 @@ import { signOut } from 'supertokens-auth-react/recipe/session';
 import { useQuery } from '@apollo/client';
 import { findUserById } from 'apps/fe-web-chat/src/api/users/queries';
 import NewChat from './newChat';
+import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 
 interface Props {
   userId: string;
-  setActiveChat: React.Dispatch<React.SetStateAction<string>>;
+  setReceiverId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function ChatListHeader({ userId, setActiveChat }: Props) {
+export default function ChatListHeader({ userId, setReceiverId }: Props) {
   const navigate = useNavigate();
 
   const { loading, error, data } = useQuery(findUserById, {
@@ -44,10 +45,10 @@ export default function ChatListHeader({ userId, setActiveChat }: Props) {
 
       <div className="flex gap-4">
         <IconButton className="rounded-full" onClick={handleLogout}>
-          <PlusCircleIcon className="h-6 w-6" color="lightGray" />
+          <ArrowLeftOnRectangleIcon className="h-6 w-6" color="lightGray" />
         </IconButton>
 
-        <NewChat setActiveChat={setActiveChat} />
+        <NewChat setReceiverId={setReceiverId} />
       </div>
     </div>
   );

@@ -13,10 +13,10 @@ import { findUsers } from 'apps/fe-web-chat/src/api/users/queries';
 import UserItem from '../../atoms/userItem';
 
 interface Props {
-  setActiveChat: React.Dispatch<React.SetStateAction<string>>;
+  setReceiverId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function newChat({ setActiveChat }: Props) {
+export default function newChat({ setReceiverId }: Props) {
   const [input, setInput] = useState<string>('');
   const [open, setOpen] = useState<false | undefined>(undefined);
 
@@ -27,7 +27,7 @@ export default function newChat({ setActiveChat }: Props) {
   function handleSearch() {}
 
   function handleSelectUser(user_id: string) {
-    setActiveChat(user_id);
+    setReceiverId(user_id);
     setOpen(false);
   }
 

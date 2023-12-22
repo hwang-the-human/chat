@@ -17,8 +17,7 @@ export class MessagesService implements OnModuleInit {
   constructor(
     @InjectRepository(MessageEntity)
     private messagesRepository: Repository<MessageEntity>,
-    @Inject('USERS_SERVICE') private readonly usersClient: ClientKafka,
-    private readonly chatsService: ChatsService
+    @Inject('USERS_SERVICE') private readonly usersClient: ClientKafka
   ) {}
 
   onModuleInit() {
@@ -28,11 +27,6 @@ export class MessagesService implements OnModuleInit {
   async createMessage(
     createMessageInput: CreateMessageInput
   ): Promise<MessageEntity> {
-    await this.chatsService.createChat({
-      senderId: createMessageInput.senderId,
-      receiverId: createMessageInput.receiverId,
-    } satisfies CreateChatInput);
-
     const newMessage = this.messagesRepository.create(createMessageInput);
     return await this.messagesRepository.save(newMessage);
   }
@@ -52,16 +46,17 @@ export class MessagesService implements OnModuleInit {
           receiverId: receiverId,
         },
         {
+          senderId: receiverId,
           receiverId: senderId,
         },
       ],
-      // order: { id: 'DESC' },
+      order: { id: 'DESC' },
       take: take,
       skip: skip,
     });
 
     return {
-      items: result,
+      items: result.reverse(),
       totalItems: total,
     };
   }

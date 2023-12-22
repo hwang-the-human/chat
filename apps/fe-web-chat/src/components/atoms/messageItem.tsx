@@ -6,21 +6,21 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 
 interface Props {
   message: FindMyMessagesQuery['findMyMessages']['items'][number];
-  activeChat: string;
+  receiverId: string;
 }
 
-export default function MessageItem({ message, activeChat }: Props) {
+export default function MessageItem({ message, receiverId }: Props) {
   return (
     <div
-      className={`flex max-w-full ${
-        message.receiver.user_id === activeChat
+      className={`flex px-4 py-1 box-border ${
+        message.receiver.user_id === receiverId
           ? 'justify-end'
           : 'justify-start'
       }`}
     >
       <div
         className={`flex gap-1 ${
-          message.receiver.user_id === activeChat
+          message.receiver.user_id === receiverId
             ? 'bg-green-700'
             : 'bg-gray-700'
         } pl-2 pr-2 pb-1 pt-1 box-border rounded-md`}
@@ -28,7 +28,7 @@ export default function MessageItem({ message, activeChat }: Props) {
         <Typography variant="h6" color="white">
           {message.content}
         </Typography>
-        {message.createdAt ? (
+        {message.id ? (
           <CheckIcon className="h-4 w-4 text-gray-200 mt-4" />
         ) : (
           <ClockIcon className="h-4 w-4 text-gray-200 mt-4" />

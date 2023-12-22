@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MessagesModule } from '../messages/messages.module';
-import { EventsModule } from '../events/events.module';
+import { EventsModule } from '../../../be-events/src/events/events.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MessageEntity } from '@app/shared/be-messages/entities/message.entity';
 import { UserEntity } from '@app/shared/be-users/entities/user.entity';
@@ -47,6 +47,27 @@ import { ChatsService } from '../chats/chats.service';
       {
         imports: [ConfigModule],
         name: 'USERS_SERVICE',
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.KAFKA,
+          options: {
+            client: {
+              brokers: [configService.get<string>('KAFKA_BROKER')],
+              // ssl: {
+              //   ca: [configService.get<string>('SSL_CA')],
+              //   key: configService.get<string>('SSL_KEY'),
+              //   cert: configService.get<string>('SSL_CERT'),
+              // },
+            },
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
+
+    ClientsModule.registerAsync([
+      {
+        imports: [ConfigModule],
+        name: 'EVENTS_SERVICE',
         useFactory: async (configService: ConfigService) => ({
           transport: Transport.KAFKA,
           options: {

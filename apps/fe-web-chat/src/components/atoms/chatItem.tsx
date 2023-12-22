@@ -11,14 +11,16 @@ import { FindMyChatsQuery } from '../../graphql/graphql';
 import { useQuery } from '@apollo/client';
 import { findMyMessages } from '../../api/messages/queries';
 import dayjs from 'dayjs';
+import { ClockIcon } from '@heroicons/react/24/outline';
+import { CheckIcon } from '@heroicons/react/24/outline';
 
 interface Props {
   chat: FindMyChatsQuery['findMyChats']['items'][number];
-  activeChat: string;
-  setActiveChat: React.Dispatch<React.SetStateAction<string>>;
+  receiverId: string;
+  setReceiverId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function ChatItem({ chat, activeChat, setActiveChat }: Props) {
+export default function ChatItem({ chat, receiverId, setReceiverId }: Props) {
   const { loading, error, data } = useQuery(findMyMessages, {
     variables: {
       senderId: chat.sender.user_id,
@@ -32,17 +34,17 @@ export default function ChatItem({ chat, activeChat, setActiveChat }: Props) {
   }, [data]);
 
   function handleSelectChat() {
-    setActiveChat(chat.receiver.user_id);
+    setReceiverId(chat.receiver.user_id);
   }
 
   return (
     <ListItem
       className={`flex justify-between p-2 box-border ${
-        chat.receiver.user_id === activeChat ? 'bg-gray-700' : ''
+        chat.receiver.user_id === receiverId ? 'bg-gray-700' : ''
       }`}
       onClick={handleSelectChat}
     >
-      <div className="flex gap-2">
+      <div className="flex gap-2 overflow-hidden">
         <ListItemPrefix>
           <Avatar
             src={chat.receiver.imageUrl}
@@ -52,18 +54,32 @@ export default function ChatItem({ chat, activeChat, setActiveChat }: Props) {
             height="50px"
           />
         </ListItemPrefix>
-        <div>
+        <div className="overflow-hidden">
           <Typography variant="h6" color="white">
             {chat.receiver.firstName} {chat.receiver.lastName}
           </Typography>
-          <Typography variant="small" className="font-normal text-gray-400">
-            {message && message.content}
-          </Typography>
+          {message && (
+            <div className="flex flex-row items-center gap-1">
+              {message.id ? (
+                <CheckIcon className="h-4 w-4 text-gray-200" />
+              ) : (
+                <ClockIcon className="h-4 w-4 text-gray-200" />
+              )}
+              <Typography
+                variant="small"
+                className="font-normal text-gray-400 text-ellipsis overflow-hidden"
+              >
+                {message.content}
+              </Typography>
+            </div>
+          )}
         </div>
       </div>
-      <Typography variant="small" className="font-normal text-gray-400">
-        {message && dayjs(message.createdAt).format('HH:mm')}
-      </Typography>
+      {message && (
+        <Typography variant="small" className="font-normal text-gray-400">
+          {dayjs(message.createdAt).format('HH:mm')}
+        </Typography>
+      )}
     </ListItem>
   );
 }

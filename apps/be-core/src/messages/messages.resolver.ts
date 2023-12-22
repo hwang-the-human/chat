@@ -13,10 +13,18 @@ import { Observable } from 'rxjs';
 import { PaginationMessagesResponse } from '@app/shared/be-messages/dto/paginate-messages-response';
 import { PaginationMessageOptionsInput } from '@app/shared/be-messages/dto/paginate-messages.input';
 import { CreateMessageInput } from '@app/shared/be-messages/dto/create-message.input';
+import { ClientKafka } from '@nestjs/microservices';
+import { Inject } from '@nestjs/common';
+import { ChatsService } from '../chats/chats.service';
+import { CreateChatInput } from '@app/shared/be-chats/dto/create-chat.input';
 
 @Resolver(() => MessageEntity)
 export class MessagesResolver {
-  constructor(private chatMessagesService: MessagesService) {}
+  constructor(
+    private messagesService: MessagesService,
+    private readonly chatsService: ChatsService,
+    @Inject('EVENTS_SERVICE') private readonly eventsClient: ClientKafka
+  ) {}
 
   @Query(() => PaginationMessagesResponse)
   findMyMessages(
@@ -30,27 +38,67 @@ export class MessagesResolver {
     })
     options?: PaginationMessageOptionsInput
   ): Promise<PaginationMessagesResponse> {
-    return this.chatMessagesService.findMyMessages(
-      senderId,
-      receiverId,
-      options
-    );
+    return this.messagesService.findMyMessages(senderId, receiverId, options);
   }
 
   @Mutation(() => MessageEntity)
-  createMessage(
+  async createMessage(
     @Args('createMessageInput') createMessageInput: CreateMessageInput
   ): Promise<MessageEntity> {
-    return this.chatMessagesService.createMessage(createMessageInput);
+    const sender = await this.messagesService
+      .findUserById(createMessageInput.senderId)
+      .toPromise();
+
+    const receiver = await this.messagesService
+      .findUserById(createMessageInput.receiverId)
+      .toPromise();
+
+    const chat1 = await this.chatsService.createChat({
+      senderId: createMessageInput.senderId,
+      receiverId: createMessageInput.receiverId,
+    } satisfies CreateChatInput);
+
+    if (chat1) {
+      this.eventsClient.emit('events.chats', {
+        ...chat1,
+        sender: sender,
+        receiver: receiver,
+      });
+    }
+
+    const chat2 = await this.chatsService.createChat({
+      senderId: createMessageInput.receiverId,
+      receiverId: createMessageInput.senderId,
+    } satisfies CreateChatInput);
+
+    if (chat2) {
+      this.eventsClient.emit('events.chats', {
+        ...chat2,
+        sender: sender,
+        receiver: receiver,
+      });
+    }
+
+    const createdMessage = await this.messagesService.createMessage(
+      createMessageInput
+    );
+
+    this.eventsClient.emit('events.messages', {
+      ...createdMessage,
+      sender: sender,
+      receiver: receiver,
+    });
+
+    return createdMessage;
   }
 
   @ResolveField(() => UserEntity)
   sender(@Parent() chatMessage: MessageEntity): Observable<UserEntity> {
-    return this.chatMessagesService.findUserById(chatMessage.senderId);
+    return this.messagesService.findUserById(chatMessage.senderId);
   }
 
   @ResolveField(() => UserEntity)
   receiver(@Parent() chatMessage: MessageEntity): Observable<UserEntity> {
-    return this.chatMessagesService.findUserById(chatMessage.receiverId);
+    return this.messagesService.findUserById(chatMessage.receiverId);
   }
 }
