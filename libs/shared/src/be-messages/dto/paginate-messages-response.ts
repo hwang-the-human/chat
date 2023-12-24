@@ -8,4 +8,10 @@ export class PaginationMessagesResponse {
 
   @Field(() => Int)
   totalItems: number;
+
+  @Field(() => Int)
+  page: number;
+
+  @Field(() => Int)
+  totalPages: number;
 }

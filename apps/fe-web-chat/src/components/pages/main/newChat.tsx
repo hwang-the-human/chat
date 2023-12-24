@@ -35,6 +35,8 @@ export default function newChat({ setReceiverId }: Props) {
     setInput(e.target.value);
   }
 
+  //TODO: add pagination
+
   return (
     <Popover open={open} placement="bottom-end">
       <PopoverHandler>

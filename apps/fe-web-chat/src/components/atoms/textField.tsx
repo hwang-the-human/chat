@@ -34,7 +34,7 @@ export default function TextField({
   const render = useMemo(
     () => (
       <Input
-        className="text-white border-gray-400 border-t-gray-300"
+        className="text-white border-gray-400 border-t-gray-300 w-full"
         color={'white'}
         label={label}
         onChange={handleOnChange}

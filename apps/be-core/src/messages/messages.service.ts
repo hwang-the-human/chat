@@ -52,12 +52,14 @@ export class MessagesService implements OnModuleInit {
       ],
       order: { id: 'DESC' },
       take: take,
-      skip: skip,
+      skip: skip * take,
     });
 
     return {
       items: result.reverse(),
       totalItems: total,
+      page: skip,
+      totalPages: Math.floor(total / take),
     };
   }
 

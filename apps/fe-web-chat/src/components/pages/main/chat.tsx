@@ -8,6 +8,7 @@ import { FindMyMessagesQuery } from 'apps/fe-web-chat/src/graphql/graphql';
 import { createMessage } from 'apps/fe-web-chat/src/api/messages/mutations';
 import ChatHeader from './chatHeader';
 import { socket } from 'apps/fe-web-chat/src/api/socket/socket';
+import { NetworkStatus } from '@apollo/client';
 
 interface Props {
   receiverId: string;
@@ -15,44 +16,47 @@ interface Props {
 }
 
 export default function Chat({ receiverId, userId }: Props) {
-  const chatContainerRef = useRef<any>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const client = useApolloClient();
-
-  const { loading, error, data } = useQuery(findMyMessages, {
-    variables: { senderId: userId, receiverId: receiverId },
-  });
-  const [handleCreateMessage] = useMutation(createMessage);
-
-  const [messages, setMessages] = useState<
-    FindMyMessagesQuery['findMyMessages']['items']
-  >([]);
   const [input, setInput] = useState<string>('');
 
-  useEffect(() => {
-    if (!chatContainerRef.current) return;
-    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-  }, [messages.length, chatContainerRef]);
+  const { data, fetchMore, networkStatus } = useQuery(findMyMessages, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      senderId: userId,
+      receiverId: receiverId,
+    },
+  });
+  const [handleCreateMessage] = useMutation(createMessage);
+  const disabled = useMemo(() => (receiverId ? false : true), [receiverId]);
 
   useEffect(() => {
-    if (!data?.findMyMessages?.items) return;
-    setMessages(data.findMyMessages.items);
-  }, [data]);
+    if (!ref.current) return;
+
+    ref.current.scrollTop = ref.current.scrollHeight / 2;
+  }, [data, ref]);
 
   useEffect(() => {
     function onMessage(
       d: FindMyMessagesQuery['findMyMessages']['items'][number]
     ) {
-      if (!data?.findMyMessages?.items) return;
+      const prev = client.readQuery({
+        query: findMyMessages,
+        variables: { senderId: userId, receiverId: d.sender.user_id },
+      });
+
+      if (!prev) return;
+
       client.writeQuery({
         query: findMyMessages,
         data: {
-          ...data,
+          ...prev,
           findMyMessages: {
-            ...data.findMyMessages,
-            items: [...data.findMyMessages.items, d],
+            ...prev.findMyMessages,
+            items: [...prev.findMyMessages.items, d],
           },
         },
-        variables: { senderId: userId, receiverId: receiverId },
+        variables: { senderId: userId, receiverId: d.sender.user_id },
       });
     }
     socket.on(`events.messages.${userId}`, onMessage);
@@ -60,7 +64,7 @@ export default function Chat({ receiverId, userId }: Props) {
     return () => {
       socket.off(`events.messages.${userId}`, onMessage);
     };
-  }, [data]);
+  }, []);
 
   async function handleSendMessage() {
     if (!input) return;
@@ -83,20 +87,16 @@ export default function Chat({ receiverId, userId }: Props) {
       },
     };
 
-    setMessages((prev) => {
-      const newArray = [...prev, newMessage];
-      client.writeQuery({
-        query: findMyMessages,
-        data: {
-          ...data,
-          findMyMessages: {
-            ...data?.findMyMessages,
-            items: newArray,
-          },
+    client.writeQuery({
+      query: findMyMessages,
+      data: {
+        ...data,
+        findMyMessages: {
+          ...data?.findMyMessages,
+          items: [...data?.findMyMessages.items!, newMessage],
         },
-        variables: { senderId: userId, receiverId: receiverId },
-      });
-      return newArray;
+      },
+      variables: { senderId: userId, receiverId: receiverId },
     });
 
     try {
@@ -110,24 +110,26 @@ export default function Chat({ receiverId, userId }: Props) {
         },
       });
 
-      setMessages((prev) => {
-        const newArray = [...prev];
-        const i = newArray.findIndex((a) => a.id === '');
-        newArray[i] = res.data?.createMessage!;
-
-        client.writeQuery({
+      const newItems = [
+        ...client.readQuery({
           query: findMyMessages,
-          data: {
-            ...data,
-            findMyMessages: {
-              ...data?.findMyMessages,
-              items: newArray,
-            },
-          },
           variables: { senderId: userId, receiverId: receiverId },
-        });
+        })?.findMyMessages.items!,
+      ];
 
-        return newArray;
+      const i = newItems.findIndex((a) => a.id === '');
+      newItems[i] = res.data?.createMessage!;
+
+      client.writeQuery({
+        query: findMyMessages,
+        data: {
+          ...data,
+          findMyMessages: {
+            ...data?.findMyMessages,
+            items: newItems,
+          },
+        },
+        variables: { senderId: userId, receiverId: receiverId },
       });
     } catch (err) {
       console.log(err);
@@ -138,7 +140,40 @@ export default function Chat({ receiverId, userId }: Props) {
     setInput(e.target.value);
   }
 
-  const disabled = useMemo(() => (receiverId ? false : true), [receiverId]);
+  function handleScroll(e: React.UIEvent<HTMLElement>) {
+    const { scrollTop } = e.currentTarget;
+
+    if (
+      scrollTop <= 20 &&
+      data?.findMyMessages?.page! < data?.findMyMessages?.totalPages! &&
+      networkStatus !== NetworkStatus.fetchMore
+    ) {
+      loadMore();
+    }
+  }
+
+  async function loadMore() {
+    await fetchMore({
+      variables: {
+        options: {
+          page: data?.findMyMessages?.page! + 1,
+        },
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+
+        return {
+          findMyMessages: {
+            ...fetchMoreResult.findMyMessages,
+            items: [
+              ...fetchMoreResult.findMyMessages.items,
+              ...prev.findMyMessages.items,
+            ],
+          },
+        };
+      },
+    });
+  }
 
   return (
     <div className="flex flex-col flex-1 border-r border-r-gray-600 gap-2 overflow-hidden">
@@ -149,8 +184,8 @@ export default function Chat({ receiverId, userId }: Props) {
         </div>
       ) : (
         <List className="flex flex-1 justify-end overflow-hidden p-0">
-          <div className="overflow-y-auto" ref={chatContainerRef}>
-            {messages.map((message, i) => (
+          <div className="overflow-y-auto" ref={ref} onScroll={handleScroll}>
+            {data?.findMyMessages.items.map((message, i) => (
               <MessageItem message={message} receiverId={receiverId} key={i} />
             ))}
           </div>

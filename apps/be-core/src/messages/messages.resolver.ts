@@ -61,8 +61,8 @@ export class MessagesResolver {
     if (chat1) {
       this.eventsClient.emit('events.chats', {
         ...chat1,
-        sender: sender,
-        receiver: receiver,
+        sender: receiver,
+        receiver: sender,
       });
     }
 

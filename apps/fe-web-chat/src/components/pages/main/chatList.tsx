@@ -42,6 +42,8 @@ export default function ChatList({ receiverId, setReceiverId, userId }: Props) {
     };
   }, [data]);
 
+  //TODO: add pagination
+
   return (
     <div className="flex flex-col flex-1 h-full border-r border-r-gray-600 overflow-hidden">
       <ChatListHeader userId={userId} setReceiverId={setReceiverId} />

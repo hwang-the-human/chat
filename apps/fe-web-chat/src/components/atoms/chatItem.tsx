@@ -22,6 +22,7 @@ interface Props {
 
 export default function ChatItem({ chat, receiverId, setReceiverId }: Props) {
   const { loading, error, data } = useQuery(findMyMessages, {
+    notifyOnNetworkStatusChange: true,
     variables: {
       senderId: chat.sender.user_id,
       receiverId: chat.receiver.user_id,

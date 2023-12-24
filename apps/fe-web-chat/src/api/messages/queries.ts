@@ -12,6 +12,8 @@ export const findMyMessages = graphql(`
       options: $options
     ) {
       totalItems
+      totalPages
+      page
       items {
         id
         content
