@@ -33,6 +33,7 @@ export default function Chat({ receiverId, userId }: Props) {
   useEffect(() => {
     if (!ref.current) return;
 
+    //TODO: Fix infinite scroll
     ref.current.scrollTop = ref.current.scrollHeight / 2;
   }, [data, ref]);
 
