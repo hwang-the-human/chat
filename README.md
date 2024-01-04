@@ -48,4 +48,8 @@ Also, I just want to notice you that I still working on this project and did not
   
 ## System Design
 
-![Chat System Design drawio](https://github.com/hwang-the-human/chat/assets/58131395/5def0bdc-8d12-4777-a745-ff2847fb5c66)
+![Chat System Design drawio](https://github.com/hwang-the-human/chat/assets/58131395/c6e75cfe-75d9-4b80-ac53-7a45007de80e)
+
+## ERD
+
+![Chat entity relationship diagram drawio](https://github.com/hwang-the-human/chat/assets/58131395/eadcf37f-a8cf-4b56-8159-788fc0a11940)
