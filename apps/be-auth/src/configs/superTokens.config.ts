@@ -1,7 +1,7 @@
 export const appInfo = {
   appName: 'ST',
-  apiDomain: 'http://localhost:4201',
-  websiteDomain: 'http://localhost:4200',
+  apiDomain: process.env.NX_BE_AUTH_URL,
+  websiteDomain: process.env.NX_FE_WEB_CHAT_URL,
   apiBasePath: '/auth',
   websiteBasePath: '/auth',
 };

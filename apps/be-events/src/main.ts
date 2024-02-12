@@ -9,6 +9,7 @@ import cors from 'cors';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
@@ -26,7 +27,7 @@ async function bootstrap() {
     },
   });
 
-  const port = 3000;
+  const port = configService.get<number>('NX_BE_EVENTS_PORT');
 
   app.use(cors());
   await app.startAllMicroservices();

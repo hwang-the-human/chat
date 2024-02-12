@@ -5,7 +5,7 @@ const config: CodegenConfig = {
   ignoreNoDocuments: true,
   generates: {
     './src/graphql/': {
-      schema: 'http://localhost:4001/graphql',
+      schema: `${process.env.NX_BE_GATEWAY_URL}/graphql/`,
       plugins: [],
       preset: 'client',
     },

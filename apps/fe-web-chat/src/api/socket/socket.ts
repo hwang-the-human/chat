@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
 
-const URL = 'http://localhost:3000';
+const URL = process.env.NX_BE_EVENTS_URL || '';
 
 export const socket = io(URL);

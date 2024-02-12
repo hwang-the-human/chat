@@ -6,13 +6,12 @@ import ThirdParty from 'supertokens-node/recipe/thirdparty';
 import Session from 'supertokens-node/recipe/session';
 import UserMetadata from 'supertokens-node/recipe/usermetadata';
 import { CreateUserInput } from '@app/shared/be-users/dto/create-user.input';
-import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class SupertokensService {
   constructor(
-    @Inject(ConfigInjectionToken) private readonly config: AuthModuleConfig,
-    private readonly usersService: UsersService
+    @Inject(ConfigInjectionToken) private config: AuthModuleConfig,
+    @Inject('USERS_SERVICE') private readonly usersClient: ClientKafka
   ) {
     supertokens.init({
       appInfo: config.appInfo,
@@ -34,7 +33,7 @@ export class SupertokensService {
                     const { given_name, family_name, picture } =
                       res.rawUserInfoFromProvider.fromUserInfoAPI;
 
-                    usersService.createUser({
+                    usersClient.emit('users.create', {
                       user_id: res.user.id,
                       firstName: given_name,
                       lastName: family_name,

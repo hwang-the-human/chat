@@ -24,7 +24,7 @@ export class SupertokensExceptionFilter implements ExceptionFilter {
       exception,
       ctx.getRequest<Request>(),
       resp,
-      ctx.getNext<NextFunction>()
+      ctx.getNext<NextFunction>(),
     );
   }
 }
